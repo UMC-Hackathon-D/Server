@@ -13,76 +13,75 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Group {
+model Party {
   id         Int      @id @default(autoincrement())
-  numMember  Int?     
-  password   String?  @db.VarChar(20)
+  numMember  Int
+  password   String   @db.VarChar(20)
   createAt   DateTime @db.DateTime(6)
   updateAt   DateTime @db.DateTime(6)
-  groupName  String   @unique @db.VarChar(20)
+  partyName  String   @unique @db.VarChar(20)
   users      User[]
 
-  @@map("group")
+  @@map("parties")
 }
 
 model Mission {
   id             Int           @id @default(autoincrement())
-  missionName    String?       @db.VarChar(20)
-  missionContent String?       @db.VarChar(50)
+  missionName    String        @db.VarChar(20)
+  missionContent String        @db.VarChar(50)
   userMissions   UserMission[]
 
-  @@map("mission")
+  @@map("missions")
 }
 
 model Character {
   id    Int     @id @default(autoincrement())
-  photo String? @db.VarChar(255)
+  photo String  @db.VarChar(255)
   users User[]
 
-  @@map("character")
+  @@map("characters")
 }
 
 model User {
   id          Int           @id @default(autoincrement())
-  group       Group?        @relation(fields: [groupId], references: [id])
-  groupId     Int?
-  name        String?       @db.VarChar(20)
+  party       Party?        @relation(fields: [partyId], references: [id])
+  partyId     Int?
+  name        String        @db.VarChar(20)
   createAt    DateTime      @db.DateTime(6)
   updateAt    DateTime      @db.DateTime(6)
   character   Character?    @relation(fields: [characterId], references: [id])
   characterId Int?
-  
-  // Relation for mission user and target user
-  missionPerformed UserMission[] @relation("MissionUser")
-  targetMissions   UserMission[] @relation("TargetUser")
+  // Relations for user missions
+  givenMissions    UserMission[] @relation("MissionUser")
+  receivedMissions UserMission[] @relation("TargetUser")
 
-  @@map("user")
+  @@map("users")
 }
 
 model UserMission {
-  id            Int              @id @default(autoincrement())
-  mission       Mission?         @relation(fields: [missionId], references: [id])
-  missionId     Int?
-  missionUser   User?           @relation("MissionUser", fields: [missionUserId], references: [id])
-  missionUserId Int?
-  targetUser    User?           @relation("TargetUser", fields: [targetUserId], references: [id])
-  targetUserId  Int?
-  status        String?         @db.VarChar(10)
-  createAt      DateTime        @db.DateTime(6)
-  updateAt      DateTime        @db.DateTime(6)
-  completeMissions CompleteMission[]
+  id            Int             @id @default(autoincrement())
+  mission       Mission         @relation(fields: [missionId], references: [id])
+  missionId     Int
+  missionUser   User           @relation("MissionUser", fields: [missionUserId], references: [id])
+  missionUserId Int
+  targetUser    User           @relation("TargetUser", fields: [targetUserId], references: [id])
+  targetUserId  Int
+  status        String         @db.VarChar(10)
+  createAt      DateTime       @db.DateTime(6)
+  updateAt      DateTime       @db.DateTime(6)
+  completeMission CompleteMission?
 
-  @@map("user_mission")
+  @@map("user_missions")
 }
 
 model CompleteMission {
   id         Int         @id @default(autoincrement())
-  mission    UserMission @relation(fields: [missionId], references: [id])
-  missionId  Int
-  photo      String?     @db.VarChar(255)
-  review     String?     @db.Text
+  userMission UserMission @relation(fields: [missionId], references: [id])
+  missionId  Int         @unique
+  photo      String      @db.VarChar(255)
+  review     String      @db.Text
   createAt   DateTime    @db.DateTime(6)
   updateAt   DateTime    @db.DateTime(6)
 
-  @@map("complete_mission")
+  @@map("complete_missions")
 }
