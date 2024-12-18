@@ -20,7 +20,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
           cat >>~/.ssh/config <<END
-          Host umc-nangmanboat
+          Host romance-boat
             HostName $EC2_HOST
             User $EC2_USER
             IdentityFile ~/.ssh/id_rsa
@@ -33,17 +33,17 @@ jobs:
 
       - name: Copy Workspace
         run: |
-          ssh umc-nangmanboat 'sudo mkdir -p /opt/app'
-          ssh umc-nangmanboat 'sudo chown ubuntu:ubuntu /opt/app'
-          scp -r ./[!.]* umc-nangmanboat:/opt/app
+          ssh romance-boat 'sudo mkdir -p /opt/app'
+          ssh romance-boat 'sudo chown ubuntu:ubuntu /opt/app'
+          scp -r ./[!.]* romance-boat:/opt/app
 
       - name: Install dependencies
         run: |
-          ssh umc-nangmanboat 'npm install --prefix /opt/app/'
+          ssh romance-boat 'npm install --prefix /opt/app/'
 
       - name: Copy systemd service file
         run: |
-          ssh umc-nangmanboat '
+          ssh romance-boat '
             echo "[Unit]
             Description=UMC 7th Project
             After=network.target
@@ -59,9 +59,9 @@ jobs:
 
       - name: Enable systemd service
         run: |
-          ssh umc-nangmanboat 'sudo systemctl daemon-reload'
-          ssh umc-nangmanboat 'sudo systemctl enable app'
+          ssh romance-boat 'sudo systemctl daemon-reload'
+          ssh romance-boat 'sudo systemctl enable app'
 
       - name: Restart systemd service
         run: |
-          ssh umc-nangmanboat 'sudo systemctl restart app'
+          ssh romance-boat 'sudo systemctl restart app'
