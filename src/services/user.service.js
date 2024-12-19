@@ -1,6 +1,10 @@
-import { userToResponseDTO } from "../dtos/user.dto.js";
+import { userToResponseDTO, responseFromUser } from "../dtos/user.dto.js";
 import { findPartyById } from "../repositories/party.repository.js";
-import { findUserByName, createUser } from "../repositories/user.repository.js";
+import {
+  findUserByName,
+  createUser,
+  getUser,
+} from "../repositories/user.repository.js";
 import {
   PartyNotFoundError,
   DuplicatePartyUserNameError,
@@ -40,4 +44,10 @@ export const createPartyUser = async (partyId, userData) => {
   const newUser = await createUser(userDataWithParty);
 
   return userToResponseDTO(newUser);
+};
+
+export const userEnter = async (data) => {
+  const user = await getUser(data.user_name, data.party_name);
+
+  return responseFromUser(user);
 };
