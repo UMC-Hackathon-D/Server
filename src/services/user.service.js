@@ -14,6 +14,7 @@ import {
   PartyMemberLimitExceededError,
   InvalidPartyPasswordError,
 } from "../party.error.js";
+import {ExsistsPartyToUserError} from "../error.js";
 
 export const createPartyUser = async (userData) => {
   const partyId = await findPartyIdByName(userData.partyName);
