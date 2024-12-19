@@ -54,9 +54,10 @@ export const addParty = async (data) => {
 export const getParty = async (partyId)=>{
     const party = await prisma.party.findFirst({where: {id: partyId}});
 
-    if(party) {
+    if(!party) {
         return null;
     }
+
     return party;
 }
 
