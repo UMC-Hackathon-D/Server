@@ -1,6 +1,8 @@
-
 import { userToResponseDTO, responseFromUser } from "../dtos/user.dto.js";
-import { findPartyById } from "../repositories/party.repository.js";
+import {
+  findPartyIdByName,
+  findPartyById,
+} from "../repositories/party.repository.js";
 import {
   findUserByName,
   createUser,
@@ -13,10 +15,16 @@ import {
   InvalidPartyPasswordError,
 } from "../party.error.js";
 
-import {ExsistsPartyToUserError} from "../error.js";
+export const createPartyUser = async (userData) => {
+  const partyId = await findPartyIdByName(userData.partyName);
 
-export const createPartyUser = async (partyId, userData) => {
-  console.log(userData);
+  if (!partyId) {
+    console.log(`Party not found - Name: ${userData.partyName}`);
+    throw new PartyNotFoundError("Requested party does not exists", {
+      noExists: userData.partyName,
+    });
+  }
+
   const party = await findPartyById(partyId);
   if (!party) {
     console.log(`Party not found - ID: ${partyId}`);
@@ -34,6 +42,8 @@ export const createPartyUser = async (partyId, userData) => {
   }
 
   const currentMembers = party.numMember || 0;
+  // const maxMembers = party.numMember;
+
   if (currentMembers >= 6) {
     throw new PartyMemberLimitExceededError(
       "Party cannot accept more members",
@@ -44,6 +54,7 @@ export const createPartyUser = async (partyId, userData) => {
   if (party.password !== userData.password) {
     throw new InvalidPartyPasswordError("Invalid party password", {
       partyId,
+      inputPassword: userData.password,
     });
   }
 
@@ -57,17 +68,14 @@ export const createPartyUser = async (partyId, userData) => {
   return userToResponseDTO(newUser);
 };
 
-
 //파티 재입장하기
 export const userEnter = async (data) => {
+  const user = await getUser(data.user_name, data.party_name);
 
-    const user = await getUser(data.user_name, data.party_name);
+  if (user === null) {
+    throw new ExsistsPartyToUserError("존재하지 않는 사용자 입니다.");
+  }
 
-    if(user === null){
-        throw new ExsistsPartyToUserError('존재하지 않는 사용자 입니다.');
-    }
-
-    // console.log(user);
-    return responseFromUser(user);
+  // console.log(user);
+  return responseFromUser(user);
 };
-

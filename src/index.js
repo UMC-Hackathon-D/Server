@@ -46,7 +46,6 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-
 app.use(
   "/docs",
   swaggerUiExpress.serve,
@@ -81,16 +80,14 @@ app.get("/openapi.json", async (req, res, next) => {
   res.json(result ? result.data : null);
 });
 
-
 //그룹 생성하기
 app.post("/api/v1/parties/create", handlerPartyCreate);
 
 // 파티 유저 등록하기
-app.post("/api/v1/parties/:partyId/signup", handleCreatePartyUser);
+app.post("/api/v1/parties/users/signup", handleCreatePartyUser);
 
 // 파티 재입장하기
 app.get("/api/v1/parties/:partyName/users/:userName", handleUserEnter);
-
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {
