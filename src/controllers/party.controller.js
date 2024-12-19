@@ -5,7 +5,7 @@ import { userToServiceEntity } from "../dtos/user.dto.js";
 import { createToParty } from "../dtos/party.dto.js";
 
 export const handleCreatePartyUser = async (req, res, next) => {
-  /* #swagger.summary = 'Create new user in party API'
+  /* #swagger.summary = '그룹에 유저 등록하기 API'
      #swagger.tags = ['Party']
      #swagger.description = 'Creates a new user in an existing party if there is space available'
      

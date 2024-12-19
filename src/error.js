@@ -21,3 +21,14 @@ export class ExsistsPartyToUserError extends Error{
         this.reason = reason;
     }
 }
+
+
+export class ExsistsCompleteMission extends Error{
+    errorCode = 'CM001';
+
+    constructor(reason,data) {
+        super(reason);
+        this.reason = reason;
+        this.data = data;
+    }
+}
