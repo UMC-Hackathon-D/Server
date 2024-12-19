@@ -1,3 +1,4 @@
+
 // schema.prisma
 
 // 데이터베이스 설정
@@ -18,6 +19,7 @@ model Party {
   createAt   DateTime? @db.DateTime(6) @map("create_at")
   updateAt   DateTime? @db.DateTime(6) @map("update_at")
   partyName  String    @unique @db.VarChar(20) @map("party_name")
+
 
   users      User[]
 
@@ -47,6 +49,7 @@ model Character {
 
 // users 테이블
 model User {
+
   id          Int         @id @default(autoincrement())
   partyId     Int?        @map("party_id")
   name        String?     @db.VarChar(20)

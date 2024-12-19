@@ -3,7 +3,10 @@ import express from "express";
 import cors from "cors";
 import swaggerAutogen from "swagger-autogen";
 import swaggerUiExpress from "swagger-ui-express";
+
+import { handleUserEnter } from "./controllers/user.controller.js";
 import {handlerPartyCreate} from "./controllers/party.controller.js";
+
 
 dotenv.config();
 
@@ -29,8 +32,10 @@ app.use((req,res,next)=>{
   };
 
   next();
+
 })
 /*****************공통 응답을 사용할 수 있는 헬퍼 함수 등록*********************/
+
 
 app.use(cors()); // cors 방식 허용
 app.use(express.static("public")); // 정적 파일 접근
@@ -82,6 +87,8 @@ app.get("/openapi.json", async (req, res, next) => {
   res.json(result ? result.data : null);
 });
 
+
+app.get("/api/v1/parties/:partyName/users/:userName",handleUserEnter);
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err,req,res,next) =>{
