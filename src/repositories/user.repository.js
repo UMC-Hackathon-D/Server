@@ -1,5 +1,6 @@
 import { prisma } from "../db.config.js";
 
+
 export const findUserByName = async (partyId, userName) => {
   try {
     const user = await prisma.user.findFirst({
@@ -36,14 +37,23 @@ export const createUser = async (userData) => {
   }
 };
 
+// 파티 재입장하기
 export const getUser = async (userName, partyName) => {
-  const user = await prisma.user.findFirstOrThrow({
-    where: {
-      name: userName,
-      party: {
-        partyName: partyName, // Party 모델의 partyName 필터
-      },
-    },
-  });
-  return user;
+
+    const user = await prisma.user.findFirst({
+      where: {
+          name: userName,
+          party:{
+              partyName: partyName
+          },
+      }
+    });
+
+    if(!user){
+        return null;
+    }
+
+
+    return user;
 };
+  

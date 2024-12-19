@@ -1,3 +1,4 @@
+
 import { userToResponseDTO, responseFromUser } from "../dtos/user.dto.js";
 import { findPartyById } from "../repositories/party.repository.js";
 import {
@@ -11,6 +12,8 @@ import {
   PartyMemberLimitExceededError,
   InvalidPartyPasswordError,
 } from "../party.error.js";
+
+import {ExsistsPartyToUserError} from "../error.js";
 
 export const createPartyUser = async (partyId, userData) => {
   console.log(userData);
@@ -54,8 +57,17 @@ export const createPartyUser = async (partyId, userData) => {
   return userToResponseDTO(newUser);
 };
 
-export const userEnter = async (data) => {
-  const user = await getUser(data.user_name, data.party_name);
 
-  return responseFromUser(user);
+//파티 재입장하기
+export const userEnter = async (data) => {
+
+    const user = await getUser(data.user_name, data.party_name);
+
+    if(user === null){
+        throw new ExsistsPartyToUserError('존재하지 않는 사용자 입니다.');
+    }
+
+    // console.log(user);
+    return responseFromUser(user);
 };
+
