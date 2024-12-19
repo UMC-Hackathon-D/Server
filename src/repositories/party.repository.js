@@ -1,4 +1,3 @@
-import { pool } from "../db.config.js";
 import { prisma } from "../db.config.js";
 
 export const findPartyById = async (partyId) => {
@@ -48,4 +47,9 @@ export const addParty = async (data) => {
   });
 
   return createdParty.id;
+};
+
+export const getParty = async (partyId) => {
+  const party = await prisma.party.findFirst({ where: { id: partyId } });
+  return party;
 };

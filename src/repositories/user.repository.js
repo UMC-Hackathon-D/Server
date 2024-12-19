@@ -1,4 +1,3 @@
-import { pool } from "../db.config.js";
 import { prisma } from "../db.config.js";
 
 export const findUserByName = async (partyId, userName) => {
@@ -23,8 +22,8 @@ export const createUser = async (userData) => {
     const newUser = await prisma.user.create({
       data: {
         name: userData.name,
-        characterId: userData.character_id, // Convert snake_case to camelCase
-        partyId: parseInt(userData.party_id), // Ensure partyId is a number
+        characterId: userData.characterId,
+        partyId: parseInt(userData.partyId),
         createAt: new Date(),
         updateAt: new Date(),
       },

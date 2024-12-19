@@ -1,9 +1,10 @@
 export const userToServiceEntity = (body) => {
   return {
     name: body.name,
-    character_id: body.characterId,
-    create_at: new Date(),
-    update_at: new Date(),
+    characterId: body.characterId,
+    password: body.password,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 };
 
@@ -11,7 +12,7 @@ export const userToResponseDTO = (user) => {
   return {
     id: user.id,
     name: user.name,
-    characterId: user.character_id,
+    characterId: user.characterId,
     partyId: user.party_id,
     character: user.character
       ? {
@@ -22,12 +23,12 @@ export const userToResponseDTO = (user) => {
     party: user.party
       ? {
           id: user.party.id,
-          name: user.party.party_name,
-          numMember: user.party.num_member,
+          name: user.party.partyName,
+          numMember: user.party.numMember,
         }
       : null,
-    createdAt: user.create_at,
-    updatedAt: user.update_at,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   };
 };
 export const responseFromUser = (user) => {

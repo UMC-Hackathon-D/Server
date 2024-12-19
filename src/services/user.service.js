@@ -9,9 +9,11 @@ import {
   PartyNotFoundError,
   DuplicatePartyUserNameError,
   PartyMemberLimitExceededError,
+  InvalidPartyPasswordError,
 } from "../party.error.js";
 
 export const createPartyUser = async (partyId, userData) => {
+  console.log(userData);
   const party = await findPartyById(partyId);
   if (!party) {
     console.log(`Party not found - ID: ${partyId}`);
@@ -28,7 +30,7 @@ export const createPartyUser = async (partyId, userData) => {
     );
   }
 
-  const currentMembers = party.num_member || 0;
+  const currentMembers = party.numMember || 0;
   if (currentMembers >= 6) {
     throw new PartyMemberLimitExceededError(
       "Party cannot accept more members",
@@ -36,9 +38,15 @@ export const createPartyUser = async (partyId, userData) => {
     );
   }
 
+  if (party.password !== userData.password) {
+    throw new InvalidPartyPasswordError("Invalid party password", {
+      partyId,
+    });
+  }
+
   const userDataWithParty = {
     ...userData,
-    party_id: partyId,
+    partyId: partyId,
   };
 
   const newUser = await createUser(userDataWithParty);
