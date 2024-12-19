@@ -15,20 +15,6 @@ export const handleCreatePartyUser = async (req, res, next) => {
         required: true,
         type: 'integer'
      }
-
-     #swagger.parameters['characterId'] = {
-        in: 'path',
-        description: 'ID of the character to use',
-        required: true,
-        type: 'integer'
-     }
-
-     #swagger.parameters['name'] = {
-        in: 'path',
-        description: 'Name of the user in the party',
-        required: true,
-        type: 'string',
-     }
      
      #swagger.requestBody = {
         required: true,
@@ -39,7 +25,8 @@ export const handleCreatePartyUser = async (req, res, next) => {
                     required: ["name", "characterId"],
                     properties: {
                         name: { type: "string", example: "PlayerOne" },
-                        characterId: { type: "integer", example: 1 }
+                        characterId: { type: "integer", example: 1 },
+                        password: { type: "string", example: "partyPassword" }
                     }
                 }
             }

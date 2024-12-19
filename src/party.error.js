@@ -30,3 +30,14 @@ export class PartyMemberLimitExceededError extends Error {
     this.statusCode = 400;
   }
 }
+
+export class InvalidPartyPasswordError extends Error {
+  errorCode = "P004";
+
+  constructor(reason = "Invalid party password", data = {}) {
+    super(reason);
+    this.reason = reason;
+    this.data = data;
+    this.statusCode = 401;
+  }
+}
