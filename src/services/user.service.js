@@ -1,5 +1,8 @@
 import { userToResponseDTO, responseFromUser } from "../dtos/user.dto.js";
-import { findPartyById } from "../repositories/party.repository.js";
+import {
+  findPartyIdByName,
+  findPartyById,
+} from "../repositories/party.repository.js";
 import {
   findUserByName,
   createUser,
@@ -12,8 +15,16 @@ import {
   InvalidPartyPasswordError,
 } from "../party.error.js";
 
-export const createPartyUser = async (partyId, userData) => {
-  console.log(userData);
+export const createPartyUser = async (userData) => {
+  const partyId = await findPartyIdByName(userData.partyName);
+
+  if (!partyId) {
+    console.log(`Party not found - Name: ${userData.partyName}`);
+    throw new PartyNotFoundError("Requested party does not exists", {
+      noExists: userData.partyName,
+    });
+  }
+
   const party = await findPartyById(partyId);
   if (!party) {
     console.log(`Party not found - ID: ${partyId}`);
@@ -31,16 +42,19 @@ export const createPartyUser = async (partyId, userData) => {
   }
 
   const currentMembers = party.numMember || 0;
-  if (currentMembers >= 6) {
+  const maxMembers = party.numMember;
+
+  if (currentMembers >= maxMembers) {
     throw new PartyMemberLimitExceededError(
       "Party cannot accept more members",
-      { partyId, currentMembers, maxMembers: 6 }
+      { partyId, currentMembers, maxMembers: maxMembers }
     );
   }
 
   if (party.password !== userData.password) {
     throw new InvalidPartyPasswordError("Invalid party password", {
       partyId,
+      inputPassword: userData.password,
     });
   }
 

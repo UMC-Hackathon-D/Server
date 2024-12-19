@@ -82,7 +82,7 @@ app.get("/openapi.json", async (req, res, next) => {
 
 //그룹 생성하기
 app.post("/api/v1/parties/create", handlerPartyCreate);
-app.post("/api/v1/parties/:partyId/signup", handleCreatePartyUser);
+app.post("/api/v1/parties/users/signup", handleCreatePartyUser);
 app.get("/api/v1/parties/:partyName/users/:userName", handleUserEnter);
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/

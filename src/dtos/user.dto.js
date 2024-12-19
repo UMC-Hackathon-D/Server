@@ -1,7 +1,7 @@
 export const userToServiceEntity = (body) => {
   return {
+    partyName: body.partyName,
     name: body.name,
-    characterId: body.characterId,
     password: body.password,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -12,14 +12,7 @@ export const userToResponseDTO = (user) => {
   return {
     id: user.id,
     name: user.name,
-    characterId: user.characterId,
     partyId: user.party_id,
-    character: user.character
-      ? {
-          id: user.character.id,
-          photo: user.character.photo,
-        }
-      : null,
     party: user.party
       ? {
           id: user.party.id,

@@ -1,5 +1,20 @@
 import { prisma } from "../db.config.js";
 
+export const findPartyIdByName = async (partyName) => {
+  try {
+    const party = await prisma.party.findUnique({
+      where: {
+        partyName: partyName,
+      },
+    });
+
+    return party ? party.id : null;
+  } catch (error) {
+    console.error("Error in findPartyIdByName", error);
+    throw error;
+  }
+};
+
 export const findPartyById = async (partyId) => {
   try {
     const party = await prisma.party.findUnique({
