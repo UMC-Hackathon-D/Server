@@ -87,13 +87,13 @@ model UserMission {
 // complete_missions 테이블
 model CompleteMission {
   id           Int         @id @default(autoincrement())
-  missionId    Int        @map("mission_id")
+  userMissionId    Int        @map("user_mission_id")
   photo        String?     @db.VarChar(255)
   review       String?     @db.Text
   createAt     DateTime?   @db.DateTime(6) @map("create_at")
   updateAt     DateTime?   @db.DateTime(6) @map("update_at")
 
-  userMission  UserMission @relation(fields: [missionId], references: [id])
+  userMission  UserMission @relation(fields: [userMissionId], references: [id])
 
   @@map("complete_missions")
 }

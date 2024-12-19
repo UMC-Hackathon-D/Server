@@ -9,3 +9,15 @@ export class ExsistsPartyNameError extends Error {
         this.data = data;
     }
 }
+
+
+
+//파티에 존재하지 않는 사용자일 경우
+export class ExsistsPartyToUserError extends Error{
+    errorCode = 'U001';
+
+    constructor(reason) {
+        super(reason);
+        this.reason = reason;
+    }
+}

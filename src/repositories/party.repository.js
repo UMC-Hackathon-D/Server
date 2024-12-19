@@ -64,7 +64,26 @@ export const addParty = async (data) => {
   return createdParty.id;
 };
 
-export const getParty = async (partyId) => {
-  const party = await prisma.party.findFirst({ where: { id: partyId } });
-  return party;
-};
+
+//파티 아이디로 파티 조회
+export const getParty = async (partyId)=>{
+    const party = await prisma.party.findFirst({where: {id: partyId}});
+
+    if(!party) {
+        return null;
+    }
+
+    return party;
+}
+
+// // 파티 정보 조회 이름으로 검색
+// export const getCheckParty = async (partyName)=>{
+//     const party = await prisma.party.findFirst({where: {partyName: partyName}});
+//
+//     if(party) {
+//         return null;
+//     }
+//
+//     return party;
+// }
+

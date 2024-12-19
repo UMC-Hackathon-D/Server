@@ -1,3 +1,4 @@
+
 export const userToServiceEntity = (body) => {
   return {
     partyName: body.partyName,
@@ -24,6 +25,9 @@ export const userToResponseDTO = (user) => {
     updatedAt: user.updatedAt,
   };
 };
+
+
+// 그룹 재입장 전송 DTO
 export const responseFromUser = (user) => {
   return {
     userId: user.id,
@@ -31,9 +35,12 @@ export const responseFromUser = (user) => {
   };
 };
 
-export const bodyToUser = (userName, partyName) => {
-  return {
-    user_name: userName,
-    party_name: partyName,
-  };
-};
+
+// 그륩 재입장 요청 DTO
+export const bodyToUser = (userName,partyName) =>{
+    return {
+        user_name: userName,
+        party_name: partyName,
+    }
+}
+

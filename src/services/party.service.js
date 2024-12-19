@@ -11,6 +11,6 @@ export const partyCreate = async (data)=>{
     }
 
     const party = await getParty(partyId);
-
+    console.log(party)
     return responseFromPartyCreate(party);
 }

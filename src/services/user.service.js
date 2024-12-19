@@ -42,12 +42,12 @@ export const createPartyUser = async (userData) => {
   }
 
   const currentMembers = party.numMember || 0;
-  const maxMembers = party.numMember;
+  // const maxMembers = party.numMember;
 
-  if (currentMembers >= maxMembers) {
+  if (currentMembers >= 6) {
     throw new PartyMemberLimitExceededError(
       "Party cannot accept more members",
-      { partyId, currentMembers, maxMembers: maxMembers }
+      { partyId, currentMembers, maxMembers: 6 }
     );
   }
 
@@ -68,8 +68,14 @@ export const createPartyUser = async (userData) => {
   return userToResponseDTO(newUser);
 };
 
+//파티 재입장하기
 export const userEnter = async (data) => {
   const user = await getUser(data.user_name, data.party_name);
 
+  if (user === null) {
+    throw new ExsistsPartyToUserError("존재하지 않는 사용자 입니다.");
+  }
+
+  // console.log(user);
   return responseFromUser(user);
 };
