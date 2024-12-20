@@ -1,6 +1,6 @@
 import {StatusCodes} from "http-status-codes";
-import { partyCollections} from "../services/collection.service.js";
-import {collectionToParty} from "../dtos/collection.dto.js";
+import {partyCollections, showReview} from "../services/collection.service.js";
+import {collectionToParty, reviewToCollection} from "../dtos/collection.dto.js";
 
 
 //해당 그룹의 낭만모음집 조회
@@ -133,3 +133,59 @@ export const handlerGetCollection = async (req, res) => {
 */
 }
 
+// 미션 후기 상세 조회
+export const handlerGetReview = async(req,res,next) => {
+    const review = await showReview(reviewToCollection(req.params));
+    res.status(StatusCodes.OK).success(review);
+    /*
+  #swagger.summary = '미션 후기 상세조회 API';
+  #swagger.description = 'CMId(CompleteMission의 아이디)를 통해 완료된 미션의 후기를 가져온다.';
+  #swagger.tags = ['collection']
+
+  #swagger.parameters['partyId'] = {
+    in: 'path',
+    description: '파티 ID',
+    required: true,
+  }
+
+  #swagger.parameters['CMId'] = {
+    in: 'path',
+    description: '완료된 미션 ID',
+    required: true,
+  }
+
+  #swagger.responses[200] = {
+    description: "낭만모음집 조회 성공",
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            resultType: { type: "string", example: "SUCCESS" },
+            error: { type: "object", nullable: true, example: null },
+            success: {
+              type: "object",
+              properties: {
+                collection: {
+                  type: "object",
+                  properties: {
+                    missionName: { type: "string", example: "코드 대신 짜주기" },
+                    review: { type: "string", example: "살려줘" },
+                    fromUserName: { type: "string", example: "강림" },
+                    targetUserName: { type: "string", example: "깡태" },
+                    photo: { type: "string", example: "xxxxxxx.png" },
+                    userCharacter: { type: "string", example: "xxxxxxx.png" },
+                    createAt: { type: "string", format: "date-time", example: "2024-12-19 01:22:03.000000" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+*/
+}
