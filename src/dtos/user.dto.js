@@ -13,7 +13,7 @@ export const userToResponseDTO = (user) => {
   return {
     id: user.id,
     name: user.name,
-    partyId: user.party_id,
+    partyId: user.partyId,
     party: user.party
       ? {
           id: user.party.id,
@@ -42,5 +42,14 @@ export const bodyToUser = (userName,partyName) =>{
         userName: userName,
         partyName: partyName,
     }
+}
+
+//닉네임 재설정 요청 dto
+export const bodyToRenameUser = (userId,partyId,body) =>{
+  return {
+    userName: body.name,
+    partyId: parseInt(partyId),
+    userId: parseInt(userId),
+  }
 }
 

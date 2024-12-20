@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { userEnter } from "../services/user.service.js";
-import { bodyToUser } from "../dtos/user.dto.js";
+import { userEnter, userRename } from "../services/user.service.js";
+import { bodyToRenameUser, bodyToUser } from "../dtos/user.dto.js";
 
 // 그룹 재입장하기
 export const handleUserEnter = async (req, res, next) => {
@@ -71,4 +71,13 @@ export const handleUserEnter = async (req, res, next) => {
     }
   };
 */
+};
+
+// 닉네임 변경하기
+export const handleRenameUser = async (req, res, next) => {
+  console.log("사용자가 닉네임 변경을 요청하였습니다.");
+
+  const user = await userRename(bodyToRenameUser(req.params.userId, req.params.partyId, req.body));
+
+  res.status(StatusCodes.OK).success(user);
 };
