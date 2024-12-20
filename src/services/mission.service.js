@@ -15,7 +15,7 @@ import {
   MissionNotOngoingError,
   NoAvailableTargetUsersError,
   UserHasOngoingMissionError,
-} from "../mission.error.js";
+} from "../errors/mission.error.js";
 
 export const getUserOngoingMission = async (partyId, userId) => {
   const ongoingMission = await findOngoingMissionByUserId(userId);

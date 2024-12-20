@@ -1,6 +1,6 @@
 import { getAllCharacters } from "../repositories/character.repository.js";
 import { characterToResponseDTO } from "../dtos/character.dto.js";
-import { CharacterNotFoundError } from "../character.error.js";
+import { CharacterNotFoundError } from "../errors/character.error.js";
 
 export const getCharacters = async () => {
   const characters = await getAllCharacters();
