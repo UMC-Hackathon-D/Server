@@ -1,4 +1,8 @@
-import { userToResponseDTO, responseFromUser } from "../dtos/user.dto.js";
+import {
+  userToResponseDTO,
+  responseFromUser,
+  updatedUserToResponseDTO,
+} from "../dtos/user.dto.js";
 import {
   findPartyIdByName,
   findPartyById,
@@ -9,6 +13,7 @@ import {
   getUser,
   updateUserName,
   findUserById,
+  updateUserCharacterId,
 } from "../repositories/user.repository.js";
 import {
   PartyNotFoundError,
@@ -16,8 +21,13 @@ import {
   PartyMemberLimitExceededError,
   InvalidPartyPasswordError,
 } from "../party.error.js";
-import {ExistUserNameError, ExsistsPartyToUserError} from "../error.js";
 
+import {ExistUserNameError, ExsistsPartyToUserError} from "../error.js";
+import { CharacterNotFoundError } from "../character.error.js";
+import { findCharacterById } from "../repositories/character.repository.js";
+
+
+// add user to party
 export const createPartyUser = async (userData) => {
   const partyId = await findPartyIdByName(userData.partyName);
 
@@ -105,4 +115,16 @@ export const userRename = async (data) =>{
   const user = await updateUserName(data);
 
   return user;
+};
+
+// update user character
+export const updateUseCharacter = async (partyId, userId, characterId) => {
+  const character = await findCharacterById(characterId);
+  if (!character) {
+    throw new CharacterNotFoundError("Character not found", { characterId });
+  }
+
+  const updatedUser = await updateUserCharacterId(userId, characterId);
+
+  return updatedUserToResponseDTO(updatedUser);
 };
