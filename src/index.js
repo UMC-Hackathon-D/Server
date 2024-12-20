@@ -8,7 +8,11 @@ import {
   handlerPartyCreate,
 } from "./controllers/party.controller.js";
 import { handleUserEnter } from "./controllers/user.controller.js";
-import {handlerGetCollection, handlerGetReview} from "./controllers/collection.controller.js";
+import {
+  handlerGetCollection,
+  handlerGetReview,
+} from "./controllers/collection.controller.js";
+import { handleGetCharacters } from "./controllers/character.controller.js";
 
 dotenv.config();
 
@@ -74,7 +78,8 @@ app.get("/openapi.json", async (req, res, next) => {
       title: "Nangman Boat",
       description: "UMC 장기 해커톤 개쩌는 D조 낭만보트",
     },
-    host: `${process.env.SERVER_IP}:3000`,
+    // host: `${process.env.SERVER_IP}:3000`,
+    host: `localhost:${3000}`,
   };
 
   const result = await swaggerAutogen(options)(outputFile, routes, doc);
@@ -90,12 +95,20 @@ app.post("/api/v1/parties/users/signup", handleCreatePartyUser);
 // 파티 재입장하기
 app.get("/api/v1/parties/:partyName/users/:userName", handleUserEnter);
 
-
 // 낭만모음집 조회
-app.get("/api/v1/parties/:partyId/users/:userId/collection", handlerGetCollection);
+app.get(
+  "/api/v1/parties/:partyId/users/:userId/collection",
+  handlerGetCollection
+);
 
 // 미션 후기 상세 조회
-app.get("/api/v1/parties/:partyId/collection/complete_missions/:CMId", handlerGetReview);
+app.get(
+  "/api/v1/parties/:partyId/collection/complete_missions/:CMId",
+  handlerGetReview
+);
+
+// get character lists
+app.get("/api/v1/characters", handleGetCharacters);
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {
