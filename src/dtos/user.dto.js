@@ -72,12 +72,4 @@ export const bodyToRenameUser = (userId,partyId,body) =>{
     partyId: parseInt(partyId),
     userId: parseInt(userId),
   }
-}
-
-
-export const bodyToUser = (userName, partyName) => {
-  return {
-    userName: userName,
-    partyName: partyName,
-  };
 };
