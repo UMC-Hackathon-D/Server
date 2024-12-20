@@ -1,5 +1,6 @@
 import { prisma } from "../db.config.js";
 
+//파티 아이디로 파티 내 유저 검색
 export const findUserByName = async (partyId, userName) => {
   try {
     const user = await prisma.user.findFirst({

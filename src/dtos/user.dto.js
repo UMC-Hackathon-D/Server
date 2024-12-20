@@ -60,7 +60,7 @@ export const responseFromUser = (user) => {
 // 그륩 재입장 요청 DTO
 export const bodyToUser = (userName, partyName) => {
   return {
-    user_name: userName,
-    party_name: partyName,
+    userName: userName,
+    partyName: partyName,
   };
 };

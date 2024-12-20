@@ -79,7 +79,18 @@ export const createPartyUser = async (userData) => {
 
 //파티 재입장하기
 export const userEnter = async (data) => {
-  const user = await getUser(data.user_name, data.party_name);
+  //파티 존재 여부 확인
+  const partyId = await findPartyIdByName(data.partyName);
+
+  if (!partyId) {
+    console.log(`Party not found - Name: ${data.partyName}`);
+    throw new PartyNotFoundError("Requested party does not exists", {
+      noExists: data.partyName,
+    })
+  };
+
+  //유저 존재 여부 확인
+  const user = await getUser(data.userName, data.partyName);
 
   if (user === null) {
     throw new ExsistsPartyToUserError("존재하지 않는 사용자 입니다.");
