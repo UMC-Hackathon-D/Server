@@ -11,6 +11,8 @@ import {
   findUserByName,
   createUser,
   getUser,
+  updateUserName,
+  findUserById,
   updateUserCharacterId,
 } from "../repositories/user.repository.js";
 import {
@@ -19,9 +21,11 @@ import {
   PartyMemberLimitExceededError,
   InvalidPartyPasswordError,
 } from "../party.error.js";
-import { ExsistsPartyToUserError } from "../error.js";
+
+import {ExistUserNameError, ExsistsPartyToUserError} from "../error.js";
 import { CharacterNotFoundError } from "../character.error.js";
 import { findCharacterById } from "../repositories/character.repository.js";
+
 
 // add user to party
 export const createPartyUser = async (userData) => {
@@ -98,6 +102,19 @@ export const userEnter = async (data) => {
 
   // console.log(user);
   return responseFromUser(user);
+};
+
+//유저 닉네임 변경하기
+export const userRename = async (data) =>{
+  const isUserName = await findUserByName(data.partyId, data.userName);
+  
+  if(isUserName){
+    throw new ExistUserNameError("그룹 내 동일한 닉네임이 있습니다.");
+  }
+
+  const user = await updateUserName(data);
+
+  return user;
 };
 
 // update user character

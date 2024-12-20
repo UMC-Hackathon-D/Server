@@ -7,10 +7,8 @@ import {
   handleCreatePartyUser,
   handlerPartyCreate,
 } from "./controllers/party.controller.js";
-import {
-  handleUserEnter,
-  handleUpdateUserCharacter,
-} from "./controllers/user.controller.js";
+import { handleRenameUser, handleUserEnter, handleUpdateUserCharacter } from "./controllers/user.controller.js";
+
 import {
   handlerGetCollection,
   handlerGetReview,
@@ -114,6 +112,10 @@ app.get(
 // get character lists
 app.get("/api/v1/characters", handleGetCharacters);
 
+
+// 사용자 닉네임 변경하기
+app.patch("/api/v1/parties/:partyId/users/:userId/rename",handleRenameUser);
+
 // patch user character
 app.patch(
   "/api/v1/parties/:partyId/users/:userId/character",
@@ -125,6 +127,7 @@ app.get(
   "/api/v1/parties/:partyId/users/:userId/mission/ongoing",
   handleGetUserOngoingMission
 );
+
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {

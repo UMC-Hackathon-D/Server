@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { userEnter, updateUseCharacter } from "../services/user.service.js";
-import { bodyToUser } from "../dtos/user.dto.js";
+import { userEnter, userRename, updateUseCharacter } from "../services/user.service.js";
+import { bodyToRenameUser, bodyToUser } from "../dtos/user.dto.js";
 
 // 그룹 재입장하기
 export const handleUserEnter = async (req, res, next) => {
@@ -75,6 +75,79 @@ export const handleUserEnter = async (req, res, next) => {
 */
 };
 
+// 닉네임 변경하기
+export const handleRenameUser = async (req, res, next) => {
+  console.log("사용자가 닉네임 변경을 요청하였습니다.");
+
+  const user = await userRename(bodyToRenameUser(req.params.userId, req.params.partyId, req.body));
+
+  res.status(StatusCodes.OK).success(user);
+  /*
+  #swagger.summary = '사용자 닉네임 변경 API';
+  #swagger.tags = ['User']
+  #swagger.parameters['partyId'] = {
+    in: 'path',
+    description: '파티 아이디',
+    required: true,
+    schema: 1
+  }
+  #swagger.parameters['userId'] = {
+    in: 'path',
+    description: '유저 아이디',
+    required: true,
+    schema: 1
+  }
+
+  #swagger.responses[200] = {
+    description: "사용자 닉네임 변경 성공 응답",
+        content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            resultType: { type: "string", example: "SUCCESS" },
+            error: { type: "object", nullable: true, example: null },
+            success: {
+              type: "object",
+              properties: {
+                id: { type: "number", example: 6 },
+                partyId: { type: "string", example: "엔찌" },
+                name: { type: "string", example: "새로운닉네임" },
+                createdAt: { type: "string", format: "date-time", example: "2024-02-20T12:00:00Z" },
+                updatedAt: { type: "string", format: "date-time", example: "2024-02-20T12:00:00Z" },
+                characterId: { type: "number", example: 1 }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+
+  #swagger.responses[400] = {
+    description: "사용자 닉네임 변경 실패 응답",
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            resultType: { type: "string", example: "FAIL" },
+            error: {
+              type: "object",
+              properties: {
+                errorCode: { type: "string", example: "U002" },
+                reason: { type: "string", example: "그룹 내 동일한 닉네임이 있습니다." }
+              }
+            },
+            success: { type: "object", nullable: true, example: null }
+          }
+        }
+      }
+    }
+  };
+*/
+
+};
 export const handleUpdateUserCharacter = async (req, res, next) => {
   console.log("유저의 캐릭터 선택을 요청했습니다!");
   console.log("params: ", req.params);
@@ -127,7 +200,7 @@ export const handleUpdateUserCharacter = async (req, res, next) => {
 
   #swagger.responses[200] = {
     description: "Successfully updated party user character",
-    content: {
+        content: {
       "application/json": {
         schema: {
           type: "object",
@@ -182,3 +255,4 @@ export const handleUpdateUserCharacter = async (req, res, next) => {
   }
 */
 };
+

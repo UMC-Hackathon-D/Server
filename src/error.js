@@ -30,3 +30,14 @@ export class ExsistsCompleteMission extends Error{
         this.data = data;
     }
 }
+
+// 사용자 이름 변경시 이미 존재하는 이름일때
+export class ExistUserNameError extends Error{
+    errorCode = "U002";
+
+    constructor(reason,data){
+        super(reason);
+        this.reason = reason;
+    }
+
+}
