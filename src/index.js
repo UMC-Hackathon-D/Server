@@ -16,6 +16,7 @@ import {
   handlerGetReview,
 } from "./controllers/collection.controller.js";
 import { handleGetCharacters } from "./controllers/character.controller.js";
+import { handleGetUserOngoingMission } from "./controllers/mission.controller.js";
 
 dotenv.config();
 
@@ -113,10 +114,16 @@ app.get(
 // get character lists
 app.get("/api/v1/characters", handleGetCharacters);
 
-// post user character
+// patch user character
 app.patch(
   "/api/v1/parties/:partyId/users/:userId/character",
   handleUpdateUserCharacter
+);
+
+// get user ongoing mission
+app.get(
+  "/api/v1/parties/:partyId/users/:userId/mission/ongoing",
+  handleGetUserOngoingMission
 );
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
