@@ -19,3 +19,14 @@ export class MissionNotOngoingError extends Error {
     this.statusCode = 400;
   }
 }
+
+export class NoAvailableTargetUsersError extends Error {
+  errorCode = "M003";
+
+  constructor(reason = "No available target users found", data = {}) {
+    super(reason);
+    this.reason = reason;
+    this.data = data;
+    this.statusCode = 404;
+  }
+}

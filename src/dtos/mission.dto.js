@@ -16,3 +16,17 @@ export const ongoingMissionsToResponseDTO = (mission) => {
     updatedAt: mission.updateAt,
   };
 };
+
+export const targetUserToResponseDTO = (user) => {
+  return {
+    id: user.id,
+    name: user.name,
+    characterId: user.characterId,
+    character: user.character
+      ? {
+          id: user.character.id,
+          photo: user.character.photo,
+        }
+      : null,
+  };
+};
