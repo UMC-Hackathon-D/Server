@@ -82,8 +82,8 @@ app.get("/openapi.json", async (req, res, next) => {
       title: "Nangman Boat",
       description: "UMC 장기 해커톤 개쩌는 D조 낭만보트",
     },
-    // host: `${process.env.SERVER_IP}:3000`,
-    host: `localhost:${3000}`,
+    host: `${process.env.SERVER_IP}:3000`,
+    // host: `localhost:${3000}`,
   };
 
   const result = await swaggerAutogen(options)(outputFile, routes, doc);
