@@ -10,3 +10,18 @@ export const getAllCharacters = async () => {
     throw error;
   }
 };
+
+export const findCharacterById = async (characterId) => {
+  try {
+    const character = await prisma.character.findUnique({
+      where: {
+        id: characterId,
+      },
+    });
+
+    return character;
+  } catch (error) {
+    console.error("Error in findCharacterById: ", error);
+    throw error;
+  }
+};

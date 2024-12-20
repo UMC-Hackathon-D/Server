@@ -18,7 +18,6 @@ export const findUserByName = async (partyId, userName) => {
 };
 
 export const createUser = async (userData) => {
-  console.log(userData);
   try {
     const newUser = await prisma.user.create({
       data: {
@@ -39,20 +38,42 @@ export const createUser = async (userData) => {
 
 // 파티 재입장하기
 export const getUser = async (userName, partyName) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      name: userName,
+      party: {
+        partyName: partyName,
+      },
+    },
+  });
 
-    const user = await prisma.user.findFirst({
+  if (!user) {
+    return null;
+  }
+
+  return user;
+};
+
+// user character update
+export const updateUserCharacterId = async (userId, characterId) => {
+  try {
+    const updatedUser = await prisma.user.update({
       where: {
-          name: userName,
-          party:{
-              partyName: partyName
-          },
-      }
+        id: userId,
+      },
+      data: {
+        characterId: characterId,
+        updateAt: new Date(),
+      },
+      include: {
+        character: true,
+        party: true,
+      },
     });
 
-    if(!user){
-        return null;
-    }
-
-    return user;
+    return updatedUser;
+  } catch (error) {
+    console.error("Error in updateUserCharacterId: ", error);
+    throw error;
+  }
 };
-  
