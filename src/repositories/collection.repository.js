@@ -117,5 +117,45 @@ export const getMissionStartTime = async(userId) =>{
     const startTime = userMissionInfo.createAt;
 
     return startTime;
+}
 
+// 완료된 미션을 가져오기
+export const getCompleteMission = async(CMId) =>{
+    console.log(CMId)
+    const completeMission = await prisma.completeMission.findFirst({
+        where:{id: CMId},
+    })
+
+    console.log(completeMission);
+    return completeMission;
+}
+
+// 유저의 미션 정보 가져오기
+export const getUserMission = async(userMissionId) =>{
+    const userMission = await prisma.userMission.findFirst({
+        where: {id: userMissionId}
+    })
+    return userMission;
+}
+
+// 미션 내용 가져오기
+export const getMission = async(missionId) =>{
+    const mission = await prisma.mission.findFirst({
+        where: {id: missionId},
+    })
+    return mission;
+}
+
+// 유저 정보 가져오기
+export const getUserInfo = async(userId) =>{
+    const user = await prisma.user.findFirst({
+        where: {id: userId},
+    })
+    return user;
+}
+
+// 유저의 캐릭터 사진 가져오기
+export const getCharacter = async(characterId) =>{
+    const result = await prisma.Character.findFirst({ where: {id: characterId}});
+    return result;
 }

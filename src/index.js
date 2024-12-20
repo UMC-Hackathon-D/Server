@@ -8,7 +8,7 @@ import {
   handlerPartyCreate,
 } from "./controllers/party.controller.js";
 import { handleUserEnter } from "./controllers/user.controller.js";
-import {handlerGetCollection} from "./controllers/collection.controller.js";
+import {handlerGetCollection, handlerGetReview} from "./controllers/collection.controller.js";
 
 dotenv.config();
 
@@ -94,6 +94,8 @@ app.get("/api/v1/parties/:partyName/users/:userName", handleUserEnter);
 // 낭만모음집 조회
 app.get("/api/v1/parties/:partyId/users/:userId/collection", handlerGetCollection);
 
+// 미션 후기 상세 조회
+app.get("/api/v1/parties/:partyId/collection/complete_missions/:CMId", handlerGetReview);
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {
