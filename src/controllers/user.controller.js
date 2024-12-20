@@ -1,16 +1,18 @@
 import { StatusCodes } from "http-status-codes";
-import { userEnter } from "../services/user.service.js";
+import { userEnter, updateUseCharacter } from "../services/user.service.js";
 import { bodyToUser } from "../dtos/user.dto.js";
 
 // 그룹 재입장하기
 export const handleUserEnter = async (req, res, next) => {
-    console.log("그룹에 재입장을 요청하였습니다!");
+  console.log("그룹에 재입장을 요청하였습니다!");
 
-    const user = await userEnter(bodyToUser(req.params.userName, req.params.partyName));
-  
-    // console.log(user);
-    res.status(StatusCodes.OK).success(user);
-    /*
+  const user = await userEnter(
+    bodyToUser(req.params.userName, req.params.partyName)
+  );
+
+  // console.log(user);
+  res.status(StatusCodes.OK).success(user);
+  /*
   #swagger.summary = '그룹 재입장하기 API';
   #swagger.tags = ['User']
   #swagger.parameters['partyName'] = {
@@ -70,5 +72,113 @@ export const handleUserEnter = async (req, res, next) => {
       }
     }
   };
+*/
+};
+
+export const handleUpdateUserCharacter = async (req, res, next) => {
+  console.log("유저의 캐릭터 선택을 요청했습니다!");
+  console.log("params: ", req.params);
+  console.log("body: ", req.body);
+
+  const { partyId, userId } = req.params;
+  const { characterId } = req.body;
+
+  const updatedUser = await updateUseCharacter(
+    parseInt(partyId),
+    parseInt(userId),
+    parseInt(characterId)
+  );
+
+  res.status(StatusCodes.OK).success(updatedUser);
+
+  /* 
+  #swagger.summary = 'Update User Character'
+  #swagger.tags = ['User']
+  #swagger.description = 'Update user character id if character exists'
+
+  #swagger.parameters['partyId'] = {
+    in: 'path',
+    description: 'Party Id',
+    required: true,
+    type: 'integer'
+  }
+
+  #swagger.parameters['userId'] = {
+    in: 'path',
+    description: 'User Id',
+    required: true,
+    type: 'integer'
+  }
+     
+  #swagger.requestBody = {
+    required: true,
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          required: ["characterId"],
+          properties: {
+            characterId: { type: "number", example: 1 }
+          }
+        }
+      }
+    }
+  }
+
+  #swagger.responses[200] = {
+    description: "Successfully updated party user character",
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            resultType: { type: "string", example: "SUCCESS" },
+            error: { type: "null", example: null },
+            success: {
+              type: "object",
+              properties: {
+                id: { type: "integer", example: 1 },
+                name: { type: "string", example: "PlayerOne" },
+                partyId: { type: "integer", example: 1 },
+                characterId: { type: "integer", example: 1 },
+                character: {
+                  type: "object",
+                  properties: {
+                    id: { type: "integer", example: 1 },
+                    photo: { type: "string", example: "character1.jpg" }
+                  }
+                },
+                createdAt: { type: "string", format: "date-time", example: "2024-02-20T12:00:00Z" },
+                updatedAt: { type: "string", format: "date-time", example: "2024-02-20T12:00:00Z" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #swagger.responses[404] = {
+    description: "Cannot Find Existing Character",
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            resultType: { type: "string", example: "FAIL" },
+            error: {
+              type: "object",
+              properties: {
+                errorCode: { type: "string", example: "C001" },
+                reason: { type: "string", example: "Character Not Found" },
+                data: { type: "object" }
+              }
+            },
+            success: { type: "null", example: null }
+          }
+        }
+      }
+    }
+  }
 */
 };

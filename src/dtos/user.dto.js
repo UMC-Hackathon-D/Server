@@ -1,11 +1,10 @@
-
 export const userToServiceEntity = (body) => {
   return {
     partyName: body.partyName,
     name: body.name,
     password: body.password,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createAt: new Date(),
+    updateAt: new Date(),
   };
 };
 
@@ -13,7 +12,7 @@ export const userToResponseDTO = (user) => {
   return {
     id: user.id,
     name: user.name,
-    partyId: user.party_id,
+    partyId: user.partyId,
     party: user.party
       ? {
           id: user.party.id,
@@ -21,11 +20,34 @@ export const userToResponseDTO = (user) => {
           numMember: user.party.numMember,
         }
       : null,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
+    createAt: user.createAt,
+    updateAt: user.updateAt,
   };
 };
 
+export const updatedUserToResponseDTO = (updatedUser) => {
+  return {
+    id: updatedUser.id,
+    name: updatedUser.name,
+    partyId: updatedUser.partyId,
+    characterid: updatedUser.characterId,
+    character: updatedUser.character
+      ? {
+          id: updatedUser.character.id,
+          photo: updatedUser.character.photo,
+        }
+      : null,
+    party: updatedUser.party
+      ? {
+          id: updatedUser.party.id,
+          name: updatedUser.party.partyName,
+          numMember: updatedUser.party.numMember,
+        }
+      : null,
+    createAt: updatedUser.createAt,
+    updateAt: updatedUser.updateAt,
+  };
+};
 
 // 그룹 재입장 전송 DTO
 export const responseFromUser = (user) => {
@@ -35,12 +57,10 @@ export const responseFromUser = (user) => {
   };
 };
 
-
 // 그륩 재입장 요청 DTO
-export const bodyToUser = (userName,partyName) =>{
-    return {
-        user_name: userName,
-        party_name: partyName,
-    }
-}
-
+export const bodyToUser = (userName, partyName) => {
+  return {
+    userName: userName,
+    partyName: partyName,
+  };
+};
