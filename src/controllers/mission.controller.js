@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import {
   getUserOngoingMission,
   getAvailableTargetUsers,
+  getRandomMissions,
 } from "../services/mission.service.js";
 
 export const handleGetMissionDeadline = async (req, res, next) => {
@@ -213,6 +214,67 @@ export const handleGetAvailableTargetUsers = async (req, res, next) => {
                       userId: { type: "integer", example: 2 }
                     }
                   }
+                }
+              },
+              success: { type: "null", example: null }
+            }
+          }
+        }
+      }
+    }
+  */
+};
+
+export const handleGetRandomMissions = async (req, res, next) => {
+  console.log("랜덤 미션 내용 조회를 요청했습니다!");
+
+  const randomMissions = await getRandomMissions();
+  res.status(StatusCodes.OK).success(randomMissions);
+
+  /* 
+    #swagger.summary = '랜덤 미션 조회 API'
+    #swagger.tags = ['Mission']
+    #swagger.description = '미션 목록에서 무작위로 3개의 미션을 조회합니다.'
+    
+    #swagger.responses[200] = {
+      description: "랜덤 미션 조회 성공",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              resultType: { type: "string", example: "SUCCESS" },
+              error: { type: "null", example: null },
+              success: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    id: { type: "integer", example: 1 },
+                    missionName: { type: "string", example: "비밀 미션" },
+                    missionContent: { type: "string", example: "팀원에게 격려의 메시지 보내기" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #swagger.responses[404] = {
+      description: "미션을 찾을 수 없음",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              resultType: { type: "string", example: "FAIL" },
+              error: {
+                type: "object",
+                properties: {
+                  errorCode: { type: "string", example: "M001" },
+                  reason: { type: "string", example: "No missions found" }
                 }
               },
               success: { type: "null", example: null }

@@ -1,6 +1,7 @@
 import {
   findOngoingMissionByUserId,
   findAvailableTargetUsers,
+  findRandomMissions,
 } from "../repositories/mission.repository.js";
 import {
   ongoingMissionsToResponseDTO,
@@ -45,4 +46,14 @@ export const getAvailableTargetUsers = async (partyId, userId) => {
     });
   }
   return availableTargetUsers.map((user) => targetUserToResponseDTO(user));
+};
+
+export const getRandomMissions = async () => {
+  const randomMissions = await findRandomMissions();
+
+  if (!randomMissions || randomMissions.length === 0) {
+    throw new MissionNotFoundError("No missions found in the database");
+  }
+
+  return randomMissions;
 };
