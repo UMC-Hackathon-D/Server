@@ -9,7 +9,8 @@ export const handlerGetCollection = async (req, res) => {
     res.status(StatusCodes.OK).success(collections);
     /*
   #swagger.summary = '낭만모음집 조회 API';
-  #swagger.description = '특정 파티와 유저 ID를 기반으로 해당 유저의 미션 시작 시간과 관련된 정보를 가져옵니다.';
+  #swagger.description = '특정 파티와 유저 ID를 기반으로 해당 유저의 미션 시작 시간과 관련된 정보를 가져옵니다.
+  missionStartTime은 넘겨준 userId의 미션이 진행중일경우 미션 시작 시간을 넘겨줍니다.';
   #swagger.tags = ['collection']
 
   #swagger.parameters['partyId'] = {
@@ -25,7 +26,7 @@ export const handlerGetCollection = async (req, res) => {
   }
 
   #swagger.responses[200] = {
-    description: "낭만모음집 조회 성공",
+    description: "낭만모음집 조회 성공(유저ID의 미션이 진행중인 경우)",
     content: {
       "application/json": {
         schema: {
@@ -60,7 +61,42 @@ export const handlerGetCollection = async (req, res) => {
       }
     }
   };
-
+  #swagger.responses[201] = {
+    description: "낭만모음집 조회 성공(유저ID의 미션이 완료된 경우)",
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            resultType: { type: "string", example: "SUCCESS" },
+            error: { type: "object", nullable: true, example: null },
+            success: {
+              type: "object",
+              properties: {
+                missionStartTime: { type: "string", format: "date-time", example: null },
+                collection: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      CMId: { type: "number", example: 1 },
+                      missionName: { type: "string", example: "코드 대신 짜주기" },
+                      review: { type: "string", example: "너무 힘들다" },
+                      fromUserName: { type: "string", example: "강림" },
+                      targetUserName: { type: "string", example: "깡태" },
+                      photo: { type: "string", example: "xxxxxxx.png" },
+                      userCharacter: { type: "string", example: "xxxxxxx.png" },
+                      createAt: { type: "string", format: "date-time", example: "2024-12-19 01:22:03.000000" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
   #swagger.responses[400] = {
   description: "낭만모음집 조회 실패",
   content: {
@@ -77,14 +113,7 @@ export const handlerGetCollection = async (req, res) => {
               data: {
                 type: "object",
                 properties: {
-                  id: { type: "integer", example: 1 },
-                  numMember: { type: "integer", example: 5 },
-                  createAt: {
-                    type: "string",
-                    format: "date-time",
-                    example: "2024-12-20T01:14:04.000Z"
-                  },
-                  updateAt: {
+                  missionStartTime: {
                     type: "string",
                     format: "date-time",
                     example: "2024-12-20T01:14:04.000Z"

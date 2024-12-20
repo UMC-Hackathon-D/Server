@@ -13,16 +13,16 @@ export const getPartyUsers = async(partyId)=>{
             name: true
         }
     });
-
     return users;
 }
 
 //해당 유저의 완료된 미션 후기 가져오기
 export const getCollection = async(userId) =>{
+    console.log(`userId: ${userId}`);
     const userMissionInfo = await prisma.UserMission.findFirst({
         where: {
             missionUserId: userId,
-            status: "complete",
+            status: "completed",
         },
         select: {
             id:true,
@@ -30,11 +30,13 @@ export const getCollection = async(userId) =>{
             targetUserId: true,
         }
     });
+
     console.log(userMissionInfo);
     //status가 in_progress일 경우를 말함
     if(!userMissionInfo){
         return null;
     }
+
     // 사용자 이름
     const fromUserName = await prisma.user.findFirst({
         where: {
@@ -86,6 +88,10 @@ export const getCollection = async(userId) =>{
         }
     })
 
+    // 미션은 완료했지만 완료된 미션 후기를 작성안했을경우
+    if(!completeMission){
+        return null;
+    }
 
 
     return {
@@ -111,4 +117,5 @@ export const getMissionStartTime = async(userId) =>{
     const startTime = userMissionInfo.createAt;
 
     return startTime;
+
 }
