@@ -30,3 +30,26 @@ export const targetUserToResponseDTO = (user) => {
       : null,
   };
 };
+
+export const createUserMissionDTO = (data) => {
+  return {
+    missionId: data.missionId,
+    missionUserId: data.userId,
+    targetUserId: data.targetUserId,
+    status: "ONGOING",
+    createAt: new Date(),
+    updateAt: new Date(),
+  };
+};
+
+export const userMissionToResponseDTO = (userMission) => {
+  return {
+    id: userMission.id,
+    missionId: userMission.missionId,
+    missionUserId: userMission.missionUserId,
+    targetUserId: userMission.targetUserId,
+    status: userMission.status,
+    createdAt: userMission.createAt,
+    updatedAt: userMission.updateAt,
+  };
+};

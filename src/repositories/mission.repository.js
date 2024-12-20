@@ -92,3 +92,15 @@ export const findRandomMissions = async () => {
     throw error;
   }
 };
+
+export const createUserMissionEntry = async (missionData) => {
+  try {
+    const userMission = await prisma.userMission.create({
+      data: missionData,
+    });
+    return userMission;
+  } catch (error) {
+    console.error("Error in createUserMissionEntry: ", error);
+    throw error;
+  }
+};
