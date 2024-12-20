@@ -1,8 +1,15 @@
-import { findOngoingMissionByUserId } from "../repositories/mission.repository.js";
-import { ongoingMissionsToResponseDTO } from "../dtos/mission.dto.js";
+import {
+  findOngoingMissionByUserId,
+  findAvailableTargetUsers,
+} from "../repositories/mission.repository.js";
+import {
+  ongoingMissionsToResponseDTO,
+  targetUserToResponseDTO,
+} from "../dtos/mission.dto.js";
 import {
   MissionNotFoundError,
   MissionNotOngoingError,
+  NoAvailableTargetUsersError,
 } from "../mission.error.js";
 
 export const getUserOngoingMission = async (partyId, userId) => {
@@ -26,4 +33,16 @@ export const getUserOngoingMission = async (partyId, userId) => {
   }
 
   return ongoingMission ? ongoingMissionsToResponseDTO(ongoingMission) : null;
+};
+
+export const getAvailableTargetUsers = async (partyId, userId) => {
+  const availableTargetUsers = await findAvailableTargetUsers(partyId, userId);
+
+  if (!availableTargetUsers || availableTargetUsers.length === 0) {
+    throw new NoAvailableTargetUsersError("No available target users found", {
+      partyId,
+      userId,
+    });
+  }
+  return availableTargetUsers.map((user) => targetUserToResponseDTO(user));
 };
