@@ -9,23 +9,16 @@ export const handleCreatePartyUser = async (req, res, next) => {
      #swagger.tags = ['Party']
      #swagger.description = 'Creates a new user in an existing party if there is space available'
      
-     #swagger.parameters['partyId'] = {
-        in: 'path',
-        description: 'ID of the party to join',
-        required: true,
-        type: 'integer'
-     }
-     
      #swagger.requestBody = {
         required: true,
         content: {
             "application/json": {
                 schema: {
                     type: "object",
-                    required: ["name", "characterId"],
+                    required: ["partyName", "name", "password"],
                     properties: {
+                        partyName: { type: "string", example: "PartyOne" },
                         name: { type: "string", example: "PlayerOne" },
-                        characterId: { type: "integer", example: 1 },
                         password: { type: "string", example: "partyPassword" }
                     }
                 }
@@ -47,15 +40,7 @@ export const handleCreatePartyUser = async (req, res, next) => {
                             properties: {
                                 id: { type: "integer", example: 1 },
                                 name: { type: "string", example: "PlayerOne" },
-                                characterId: { type: "integer", example: 1 },
                                 partyId: { type: "integer", example: 1 },
-                                character: {
-                                    type: "object",
-                                    properties: {
-                                        id: { type: "integer", example: 1 },
-                                        photo: { type: "string", example: "character1.jpg" }
-                                    }
-                                },
                                 party: {
                                     type: "object",
                                     properties: {
@@ -103,6 +88,35 @@ export const handleCreatePartyUser = async (req, res, next) => {
             }
         }
      }
+
+    #swagger.responses[401] = {
+        description: "Invalid party password",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                resultType: { type: "string", example: "FAIL" },
+                error: {
+                  type: "object",
+                  properties: {
+                    errorCode: { type: "string", example: "P004" },
+                    reason: { type: "string", example: "파티 비밀번호가 일치하지 않습니다" },
+                    data: {
+                      type: "object",
+                      properties: {
+                        partyId: { type: "integer", example: 1 },
+                        inputPassword: { type: "string", example: "wrongpass"}
+                        }
+                      }
+                    }
+                  },
+                  success: { type: "null", example: null }
+                }
+              }
+            }
+          }
+        }
 
      #swagger.responses[404] = {
         description: "Party not found",
@@ -164,8 +178,7 @@ export const handleCreatePartyUser = async (req, res, next) => {
   console.log("파티 가입을 요청했습니다!");
   console.log("body: ", req.body);
 
-  const { partyId } = req.params;
-  const user = await createPartyUser(partyId, userToServiceEntity(req.body));
+  const user = await createPartyUser(userToServiceEntity(req.body));
   res.status(StatusCodes.OK).success(user);
 };
 
