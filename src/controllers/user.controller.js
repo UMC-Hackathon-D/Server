@@ -97,6 +97,21 @@ export const handleRenameUser = async (req, res, next) => {
     required: true,
     schema: 1
   }
+  
+  #swagger.requestBody = {
+    required: true,
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          required: ["userName"],
+          properties: {
+            userName: { type: "string", example: "예은" }
+          }
+        }
+      }
+    }
+  }
 
   #swagger.responses[200] = {
     description: "사용자 닉네임 변경 성공 응답",
