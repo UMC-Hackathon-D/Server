@@ -21,6 +21,7 @@ import { handleGetCharacters } from "./controllers/character.controller.js";
 import {
   handleGetUserOngoingMission,
   handleGetAvailableTargetUsers,
+  handleGetRandomMissions,
 } from "./controllers/mission.controller.js";
 
 dotenv.config();
@@ -136,9 +137,12 @@ app.get(
 
 // get availabe target users
 app.get(
-  "/api/v1/parites/:partyId/users/:userId/available-targets",
+  "/api/v1/parties/:partyId/users/:userId/available-targets",
   handleGetAvailableTargetUsers
 );
+
+// get mission contents
+app.get("/api/v1/missions/random", handleGetRandomMissions);
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {

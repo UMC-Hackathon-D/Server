@@ -71,3 +71,24 @@ export const findAvailableTargetUsers = async (partyId, userId) => {
     throw error;
   }
 };
+
+export const findRandomMissions = async () => {
+  try {
+    const allMissions = await prisma.mission.findMany({
+      select: {
+        id: true,
+        missionName: true,
+        missionContent: true,
+      },
+    });
+
+    const randomMissions = allMissions
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
+
+    return randomMissions;
+  } catch (error) {
+    console.error("Error in findRandomMissions: ", error);
+    throw error;
+  }
+};
