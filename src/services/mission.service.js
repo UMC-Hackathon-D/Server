@@ -2,15 +2,19 @@ import {
   findOngoingMissionByUserId,
   findAvailableTargetUsers,
   findRandomMissions,
+  createUserMissionEntry,
 } from "../repositories/mission.repository.js";
 import {
   ongoingMissionsToResponseDTO,
   targetUserToResponseDTO,
+  createUserMissionDTO,
+  userMissionToResponseDTO,
 } from "../dtos/mission.dto.js";
 import {
   MissionNotFoundError,
   MissionNotOngoingError,
   NoAvailableTargetUsersError,
+  UserHasOngoingMissionError,
 } from "../mission.error.js";
 
 export const getUserOngoingMission = async (partyId, userId) => {
@@ -56,4 +60,23 @@ export const getRandomMissions = async () => {
   }
 
   return randomMissions;
+};
+
+export const createUserMission = async (data) => {
+  const existingMission = await findOngoingMissionByUserId(data.userId);
+
+  if (existingMission) {
+    throw new UserHasOngoingMissionError(
+      "User already has an ongoing mission",
+      {
+        userId: data.userId,
+        existingMissionId: existingMission.id,
+      }
+    );
+  }
+
+  const missionData = createUserMissionDTO(data);
+  const userMission = await createUserMissionEntry(missionData);
+
+  return userMissionToResponseDTO(userMission);
 };

@@ -30,3 +30,14 @@ export class NoAvailableTargetUsersError extends Error {
     this.statusCode = 404;
   }
 }
+
+export class UserHasOngoingMissionError extends Error {
+  errorCode = "M004";
+
+  constructor(reason = "User already has an ongoing mission", data = {}) {
+    super(reason);
+    this.reason = reason;
+    this.data = data;
+    this.statusCode = 400;
+  }
+}

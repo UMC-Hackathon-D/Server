@@ -22,6 +22,7 @@ import {
   handleGetUserOngoingMission,
   handleGetAvailableTargetUsers,
   handleGetRandomMissions,
+  handleCreateUserMission,
 } from "./controllers/mission.controller.js";
 
 dotenv.config();
@@ -143,6 +144,12 @@ app.get(
 
 // get mission contents
 app.get("/api/v1/missions/random", handleGetRandomMissions);
+
+// post user mission
+app.post(
+  "/api/v1/parties/:partyId/users/:userId/missions",
+  handleCreateUserMission
+);
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {

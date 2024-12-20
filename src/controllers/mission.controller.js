@@ -3,6 +3,7 @@ import {
   getUserOngoingMission,
   getAvailableTargetUsers,
   getRandomMissions,
+  createUserMission,
 } from "../services/mission.service.js";
 
 export const handleGetMissionDeadline = async (req, res, next) => {
@@ -275,6 +276,116 @@ export const handleGetRandomMissions = async (req, res, next) => {
                 properties: {
                   errorCode: { type: "string", example: "M001" },
                   reason: { type: "string", example: "No missions found" }
+                }
+              },
+              success: { type: "null", example: null }
+            }
+          }
+        }
+      }
+    }
+  */
+};
+
+export const handleCreateUserMission = async (req, res, next) => {
+  console.log("유저 미션 등록을 요청했습니다!");
+  console.log("params: ", req.params);
+  console.log("body: ", req.body);
+
+  const { partyId, userId } = req.params;
+  const { missionId, targetUserId } = req.body;
+
+  const userMission = await createUserMission({
+    partyId: parseInt(partyId),
+    userId: parseInt(userId),
+    missionId: parseInt(missionId),
+    targetUserId: parseInt(targetUserId),
+  });
+
+  res.status(StatusCodes.OK).success(userMission);
+
+  /* 
+    #swagger.summary = '유저 미션 등록 API'
+    #swagger.tags = ['Mission']
+    #swagger.description = '특정 유저에게 미션을 할당합니다.'
+    
+    #swagger.parameters['partyId'] = {
+      in: 'path',
+      description: '파티 ID',
+      required: true,
+      type: 'integer'
+    }
+    
+    #swagger.parameters['userId'] = {
+      in: 'path',
+      description: '미션을 수행할 유저 ID',
+      required: true,
+      type: 'integer'
+    }
+
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            required: ["missionId", "targetUserId"],
+            properties: {
+              missionId: { type: "integer", description: "할당할 미션 ID" },
+              targetUserId: { type: "integer", description: "미션 대상 유저 ID" }
+            }
+          }
+        }
+      }
+    }
+
+    #swagger.responses[201] = {
+      description: "미션 등록 성공",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              resultType: { type: "string", example: "SUCCESS" },
+              error: { type: "null", example: null },
+              success: {
+                type: "object",
+                properties: {
+                  id: { type: "integer", example: 1 },
+                  missionId: { type: "integer", example: 1 },
+                  missionUserId: { type: "integer", example: 2 },
+                  targetUserId: { type: "integer", example: 3 },
+                  status: { type: "string", example: "ONGOING" },
+                  createdAt: { type: "string", format: "date-time" },
+                  updatedAt: { type: "string", format: "date-time" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #swagger.responses[400] = {
+      description: "유저가 이미 진행 중인 미션이 있는 경우",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              resultType: { type: "string", example: "FAIL" },
+              error: {
+                type: "object",
+                properties: {
+                  errorCode: { type: "string", example: "M003" },
+                  reason: { type: "string", example: "User already has an ongoing mission" },
+                  data: {
+                    type: "object",
+                    properties: {
+                      userId: { type: "integer", example: 123 },
+                      existingMissionId: { type: "integer", example: 456 }
+                    }
+                  }
                 }
               },
               success: { type: "null", example: null }
