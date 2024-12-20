@@ -7,7 +7,10 @@ import {
   handleCreatePartyUser,
   handlerPartyCreate,
 } from "./controllers/party.controller.js";
-import { handleUserEnter } from "./controllers/user.controller.js";
+import {
+  handleUserEnter,
+  handleUpdateUserCharacter,
+} from "./controllers/user.controller.js";
 import {
   handlerGetCollection,
   handlerGetReview,
@@ -109,6 +112,12 @@ app.get(
 
 // get character lists
 app.get("/api/v1/characters", handleGetCharacters);
+
+// post user character
+app.patch(
+  "/api/v1/parties/:partyId/users/:userId/character",
+  handleUpdateUserCharacter
+);
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {
