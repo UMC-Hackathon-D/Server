@@ -23,15 +23,15 @@ export const findUserById = async (partyId, userId) => {
     where: {
       partyId: parseInt(partyId),
       id: parseInt(userId),
-    }
-  })
-  
-  if(!user){
+    },
+  });
+
+  if (!user) {
     return null;
   }
 
   return user;
-}
+};
 
 export const createUser = async (userData) => {
   try {
@@ -99,12 +99,27 @@ export const updateUserName = async (data) => {
   const updateUserName = await prisma.user.update({
     where: {
       id: data.userId,
-      partyId: data.partyId
+      partyId: data.partyId,
     },
     data: {
-      name: data.userName  
+      name: data.userName,
     },
   });
   return updateUserName;
-}
+};
 
+export const findTargetUserById = async (targetUserId) => {
+  try {
+    const targetUser = await prisma.user.findUnique({
+      where: { id: targetUserId },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    return targetUser;
+  } catch (error) {
+    console.error("Error in findTargetUserById: ", error);
+    throw error;
+  }
+};

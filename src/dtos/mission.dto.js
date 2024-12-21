@@ -53,3 +53,16 @@ export const userMissionToResponseDTO = (userMission) => {
     updatedAt: userMission.updateAt,
   };
 };
+
+export const missionPreviewToResponseDTO = ({
+  missionContent,
+  targetUserName,
+}) => {
+  return {
+    previewMessage: [
+      "오늘의 미션은",
+      `${targetUserName}(이)에게 ${missionContent} 입니다!`,
+      "그럼 파이팅 :)",
+    ],
+  };
+};

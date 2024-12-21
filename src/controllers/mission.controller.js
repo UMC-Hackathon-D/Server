@@ -4,6 +4,7 @@ import {
   getAvailableTargetUsers,
   getRandomMissions,
   createUserMission,
+  getMissionPreview,
 } from "../services/mission.service.js";
 
 export const handleGetMissionDeadline = async (req, res, next) => {
@@ -384,6 +385,99 @@ export const handleCreateUserMission = async (req, res, next) => {
                     properties: {
                       userId: { type: "integer", example: 123 },
                       existingMissionId: { type: "integer", example: 456 }
+                    }
+                  }
+                }
+              },
+              success: { type: "null", example: null }
+            }
+          }
+        }
+      }
+    }
+  */
+};
+
+export const handleGetMissionPreview = async (req, res, next) => {
+  console.log("미션 미리보기 조회를 요청했습니다!");
+  console.log("query params: ", req.query);
+
+  const { missionId, targetUserId } = req.query;
+
+  const preview = await getMissionPreview({
+    missionId: parseInt(missionId),
+    targetUserId: parseInt(targetUserId),
+  });
+
+  res.status(StatusCodes.OK).success(preview);
+
+  /* 
+    #swagger.summary = '미션 미리보기 조회 API'
+    #swagger.tags = ['Mission']
+    #swagger.description = '선택한 미션과 대상 유저에 대한 미리보기 메시지를 조회합니다.'
+    
+    #swagger.parameters['missionId'] = {
+      in: 'query',
+      description: '미션 ID',
+      required: true,
+      type: 'integer'
+    }
+    
+    #swagger.parameters['targetUserId'] = {
+      in: 'query',
+      description: '대상 유저 ID',
+      required: true,
+      type: 'integer'
+    }
+
+    #swagger.responses[200] = {
+      description: "미션 미리보기 조회 성공",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              resultType: { type: "string", example: "SUCCESS" },
+              error: { type: "null", example: null },
+              success: {
+                type: "object",
+                properties: {
+                  previewMessage: { 
+                    type: "array",
+                    items: {
+                      type: "string"
+                    },
+                    example: [
+                      "오늘의 미션은",
+                      "홍길동(이)에게 격려의 메시지 보내기 입니다!",
+                      "그럼 파이팅 :)"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    #swagger.responses[404] = {
+      description: "미션 또는 유저를 찾을 수 없음",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              resultType: { type: "string", example: "FAIL" },
+              error: {
+                type: "object",
+                properties: {
+                  errorCode: { type: "string", example: "M001" },
+                  reason: { type: "string", example: "미션을 찾을 수 없습니다" },
+                  data: {
+                    type: "object",
+                    properties: {
+                      missionId: { type: "integer", example: 999 }
                     }
                   }
                 }
