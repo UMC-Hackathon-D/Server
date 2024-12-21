@@ -183,3 +183,13 @@ export const updateContext = async(CMId, review) =>{
 
     return result;
 }
+
+// 미션 후기의 리뷰 삭제
+export const deleteCompleteMission = async (CMId) =>{
+    console.log(CMId);
+    const result = await prisma.completeMission.delete({
+        where:{id: CMId},
+    })
+
+    return result;
+}
