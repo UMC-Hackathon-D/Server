@@ -42,17 +42,6 @@ export class InvalidPartyPasswordError extends Error {
   }
 }
 
-//파티 생성 시 존재하는 이름일 경우
-export class ExsistsPartyNameError extends Error {
-  errorCode = 'P001';
-
-  constructor(reason, data) {
-      super(reason);
-      this.reason = reason;
-      this.data = data;
-  }
-}
-
 export class IsThereNoMemberInPartyError extends Error {
   errorCode = "P005";
 
@@ -61,5 +50,17 @@ export class IsThereNoMemberInPartyError extends Error {
     this.reason = reason;
     this.statusCode = 402;
     this.data = data;
+  }
+}
+
+//파티 생성 시 존재하는 이름일 경우
+export class ExsistsPartyNameError extends Error {
+  errorCode = 'P006';
+
+  constructor(reason, data) {
+    super(reason);
+    this.reason = reason;
+    this.data = data;
+    this.statusCode = 400;
   }
 }
