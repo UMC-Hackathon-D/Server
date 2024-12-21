@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { userEnter, userRename, updateUseCharacter } from "../services/user.service.js";
+import { userEnter, userRename, updateUseCharacter, deletePartyUser } from "../services/user.service.js";
 import { bodyToRenameUser, bodyToUser } from "../dtos/user.dto.js";
 
 // 그룹 재입장하기
@@ -270,4 +270,58 @@ export const handleUpdateUserCharacter = async (req, res, next) => {
   }
 */
 };
+
+export const handleUserDelete = async(req,res,next) =>{
+  console.log("사용자 삭제를 요청하였습니다.");
+
+  const delUser = await deletePartyUser(req.params.userId);
+  
+  res.status(StatusCodes.OK).success(delUser);
+  /* 
+  #swagger.summary = '사용자 삭제 요청'
+  #swagger.tags = ['User']
+  #swagger.description = '그룹 내 사용자 삭제 요청'
+
+  #swagger.parameters['partyId'] = {
+    in: 'path',
+    description: 'Party Id',
+    required: true,
+    type: 'integer'
+  }
+
+  #swagger.parameters['userId'] = {
+    in: 'path',
+    description: 'User Id',
+    required: true,
+    type: 'integer'
+  }
+
+  #swagger.responses[200] = {
+  description: "사용자 삭제 성공",
+  content: {
+    "application/json": {
+      schema: {
+        type: "object",
+        properties: {
+          resultType: { type: "string", example: "SUCCESS" },
+          error: { type: "null", example: null },
+          success: {
+            type: "object",
+            properties: {
+              id: { type: "integer", example: 3 },
+              name: { type: "string", example: "옌찌" },
+              partyId: { type: "integer", nullable: true, example: null },
+              characterId: { type: "integer", nullable: true, example: null },
+              character: { type: "object", nullable: true, example: null },
+              party: { type: "object", nullable: true, example: null },
+              createAt: { type: "string", nullable: true, format: "date-time", example: null },
+              updateAt: { type: "string", format: "date-time", example: "2024-12-22T00:28:16.559Z" }
+            }
+          }
+        }
+      }
+    }
+  }
+*/
+}
 

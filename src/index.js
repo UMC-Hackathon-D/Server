@@ -12,6 +12,7 @@ import {
   handleRenameUser,
   handleUserEnter,
   handleUpdateUserCharacter,
+  handleUserDelete,
 } from "./controllers/user.controller.js";
 
 import {
@@ -166,6 +167,9 @@ scheduleMissionStatusUpdate();
 
 // patch mission status manullay (in_progress -> failed)
 app.patch("/api/v1/missions/update-status", handleManualMissionStatusUpdate);
+
+//파티 내 사용자 삭제 api
+app.patch("/api/v1/parties/:partyId/users/:userId/delete",handleUserDelete);
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {

@@ -15,6 +15,7 @@ import {
   updateUserName,
   findUserById,
   updateUserCharacterId,
+  updatePartyUserDelete,
 } from "../repositories/user.repository.js";
 import {
   PartyNotFoundError,
@@ -130,3 +131,11 @@ export const updateUseCharacter = async (partyId, userId, characterId) => {
 
   return updatedUserToResponseDTO(updatedUser);
 };
+
+//유저 삭제
+export const deletePartyUser = async (userId) => {
+
+  const user = await updatePartyUserDelete(userId);
+  
+  return updatedUserToResponseDTO(user);
+}
