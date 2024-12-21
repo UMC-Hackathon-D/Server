@@ -4,7 +4,56 @@ import { PrismaClient } from "@prisma/client";
 
 dotenv.config();
 
-export const prisma = new PrismaClient();
+// Prisma 클라이언트 생성 (한국 시간 처리 포함)
+export const prisma = new PrismaClient({});
+
+// 시간 처리를 위한 미들웨어 추가
+prisma.$use(async (params, next) => {
+  // 데이터 생성/수정 시 KST로 변환
+  if (params.action === "create" || params.action === "update") {
+    if (params.args.data) {
+      const data = params.args.data;
+      // createAt 필드가 있으면 KST로 변환
+      if (data.createAt) {
+        data.createAt = convertToKST(data.createAt);
+      }
+      // updateAt 필드가 있으면 KST로 변환
+      if (data.updateAt) {
+        data.updateAt = convertToKST(data.updateAt);
+      }
+    }
+  }
+
+  const result = await next(params);
+
+  // 데이터 조회 시 KST로 변환
+  if (
+    params.action === "findMany" ||
+    params.action === "findFirst" ||
+    params.action === "findUnique"
+  ) {
+    if (result && typeof result === "object") {
+      if (result.createAt) {
+        result.createAt = convertToKST(result.createAt);
+      }
+      if (result.updateAt) {
+        result.updateAt = convertToKST(result.updateAt);
+      }
+    }
+  }
+
+  return result;
+});
+
+// KST 변환 헬퍼 함수
+export const convertToKST = (date) => {
+  return new Date(new Date(date).getTime() + 9 * 60 * 60 * 1000);
+};
+
+// 현재 시간을 KST로 반환하는 헬퍼 함수
+export const getCurrentKSTDate = () => {
+  return convertToKST(new Date());
+};
 
 // export const pool = mysql.createPool({
 //   host: process.env.DB_HOST || "localhost", // mysql의 hostname
@@ -18,4 +67,3 @@ export const prisma = new PrismaClient();
 //   connectionLimit: 10, // 몇 개의 커넥션을 가지게끔 할 것인지
 //   queueLimit: 0, // getConnection에서 오류가 발생하기 전에 Pool에 대기할 요청의 개수 한도
 // });
-

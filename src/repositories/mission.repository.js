@@ -117,3 +117,22 @@ export const findMissionById = async (missionId) => {
     throw error;
   }
 };
+
+export const updateExpiredMissionStatus = async () => {
+  try {
+    const updatedMissions = await prisma.userMission.updateMany({
+      where: {
+        status: "in_progress",
+      },
+      data: {
+        status: "failed",
+        updateAt: new Date(),
+      },
+    });
+
+    return updatedMissions;
+  } catch (error) {
+    console.log("Error in updateExpiredMissionStatus: ", error);
+    throw error;
+  }
+};
