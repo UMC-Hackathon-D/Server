@@ -104,3 +104,16 @@ export const createUserMissionEntry = async (missionData) => {
     throw error;
   }
 };
+
+export const findMissionById = async (missionId) => {
+  try {
+    const mission = await prisma.mission.findUnique({
+      where: { id: missionId },
+    });
+
+    return mission;
+  } catch (error) {
+    console.error("Error in findMissionById: ", error);
+    throw error;
+  }
+};
