@@ -28,7 +28,7 @@ export const getUserOngoingMission = async (partyId, userId) => {
     return null;
   }
 
-  if (ongoingMission.status !== "ONGOING") {
+  if (ongoingMission.status !== "in_progress") {
     throw new MissionNotOngoingError(
       "Mission exists but is not in ongoing status",
       {

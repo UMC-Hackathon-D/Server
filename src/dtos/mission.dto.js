@@ -1,5 +1,4 @@
 export const ongoingMissionsToResponseDTO = (mission) => {
-  // mission이 null이거나 undefined인 경우 null 반환
   if (!mission) {
     return null;
   }
@@ -36,7 +35,7 @@ export const createUserMissionDTO = (data) => {
     missionId: data.missionId,
     missionUserId: data.userId,
     targetUserId: data.targetUserId,
-    status: "ONGOING",
+    status: "in_progress",
     createAt: new Date(),
     updateAt: new Date(),
   };
