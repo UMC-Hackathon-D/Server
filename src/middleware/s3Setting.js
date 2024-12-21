@@ -16,13 +16,13 @@ const s3 = new S3Client({
 const allowedExtensions = [".jpg", ".png",".jpeg",".bmp",".gif"];
 
 // 파일 업로드
-export const imageUploader = multer({
+export const imageUploader =(folder = "")=> multer({
     storage: multerS3({
         s3:s3,
         bucket: process.env.AWS_S3_BUCKET_NAME, // 버킷 이름
         contentType: multerS3.AUTO_CONTENT_TYPE,
         key:(req,file,callback) => {
-            const folder = req.query.folder ?? "reviews";
+           // const folder = req.query.folder  ?? "reviews";
             const extension = path.extname(file.originalname);
             const uuid = uuidv4();
 
@@ -44,7 +44,7 @@ export const deleteImage = async (key)=>{
     try{
         const command = new DeleteObjectCommand({
             Bucket: process.env.AWS_S3_BUCKET_NAME,
-            Key: key,
+            Key: new URL(key).pathname.substring(1),
         });
         const response = await s3.send(command);
         console.log("파일 삭제 성공:", response);

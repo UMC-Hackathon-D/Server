@@ -36,3 +36,22 @@ export const responseFromReview = async (data) =>{
         createAt: data.completeMission.createAt
     }
 }
+
+// 미션 후기 수정 요청 DTO
+export const reviewToUpdate = async (body, params,file) =>{
+    return{
+        CMId: parseInt(params.CMId),
+        review: body.review,
+        photo: `https://test-umc-7th.s3.ap-northeast-2.amazonaws.com/${file.key}`
+    }
+}
+
+// 미션 후기 수정 전송 DTO
+export const responseFromReviewUpdate = async (data)=>{
+    return{
+        CMId: parseInt(data.id),
+        review: data.review,
+        photo: data.photo,
+        updateAt: data.updateAt,
+    }
+}

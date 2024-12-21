@@ -1,13 +1,14 @@
-import {responseFromCollections, responseFromReview} from "../dtos/collection.dto.js";
+import {responseFromCollections, responseFromReview, responseFromReviewUpdate} from "../dtos/collection.dto.js";
 import {
     getCharacter,
     getCollection,
     getCompleteMission, getMission,
     getMissionStartTime,
-    getPartyUsers, getUserInfo, getUserMission
+    getPartyUsers, getUserInfo, getUserMission, updateContext, updatePhoto
 } from "../repositories/collection.repository.js";
 import {getParty} from "../repositories/party.repository.js";
 import {ExsistsCompleteMission} from "../errors/collection.error.js";
+import {deleteImage} from "../middleware/s3Setting.js";
 
 
 
@@ -71,3 +72,72 @@ export const showReview = async (data) => {
 
     return responseFromReview({completeMission,mission,fromUser, fromUserCharacters,targetUser});
 }
+
+// 미션 후기 수정
+export const updateReview = async(data) =>{
+    const resolveData = await data;
+    console.log(resolveData);
+
+    // 완료된 미션 정보 가져옴
+    let review = await getCompleteMission(resolveData.CMId);
+    
+    // 수정을 안했을 때
+    if(review.photo === resolveData.photo && review.review === resolveData.review ){
+        return review;
+    }
+
+    // 리뷰만 수정했을 때
+    if(review.photo === resolveData.photo){
+        // 미션 후기 리뷰 수정
+        const context = await updateContext(resolveData.CMId, resolveData.review);
+        return context;
+    }
+
+    // 사진만 수정했을 때
+    if(review.review === resolveData.review){
+        // 미션 후기 사진 수정
+        const photo = await updatePhoto(resolveData.CMId,resolveData.photo);
+
+        //s3에 기존 사진삭제
+        const response = await deleteImage(review.photo);
+
+        return photo;
+    }
+
+    // 미션 후기 사진 수정
+    const photo = await updatePhoto(resolveData.CMId,resolveData.photo);
+    
+    //s3에 기존 사진삭제
+    const response = await deleteImage(review.photo);
+    
+    // 미션 후기 리뷰 수정
+    const context = await updateContext(resolveData.CMId, resolveData.review);
+
+    return responseFromReviewUpdate(context);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
