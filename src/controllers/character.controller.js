@@ -3,7 +3,6 @@ import { getCharacters } from "../services/character.service.js";
 
 export const handleGetCharacters = async (req, res, next) => {
   console.log("캐릭터 조회를 요청했습니다!");
-  console.log("body: ", req.body);
 
   const characters = await getCharacters();
   res.status(StatusCodes.OK).success(characters);
