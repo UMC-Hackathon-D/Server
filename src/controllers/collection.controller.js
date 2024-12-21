@@ -1,6 +1,6 @@
 import {StatusCodes} from "http-status-codes";
-import {partyCollections, showReview} from "../services/collection.service.js";
-import {collectionToParty, reviewToCollection} from "../dtos/collection.dto.js";
+import {partyCollections, showReview, updateReview} from "../services/collection.service.js";
+import {collectionToParty, reviewToCollection, reviewToUpdate} from "../dtos/collection.dto.js";
 
 
 //해당 그룹의 낭만모음집 조회
@@ -188,4 +188,70 @@ export const handlerGetReview = async(req,res,next) => {
 
 
 */
+}
+
+
+//미션 후기 수정
+export const handlerReviewUpdate = async (req, res) => {
+    const review = await updateReview(reviewToUpdate(req.body, req.params,req.file));
+    res.status(StatusCodes.OK).success(review);
+    /*
+   #swagger.summary = '미션 후기 수정 API';
+   #swagger.description = 'CMId(CompleteMission의 아이디)를 통해 완료된 미션의 후기를 수정한다.';
+   #swagger.tags = ['collection']
+
+   #swagger.parameters['CMId'] = {
+     in: 'path',
+     description: '완료된 미션 ID',
+     required: true,
+   }
+
+   #swagger.requestBody = {
+     required: true,
+     content: {
+       'multipart/form-data': {
+         schema: {
+           type: 'object',
+           properties: {
+             review: {
+               type: 'string',
+               description: '후기 내용',
+               example: '살려줘',
+             },
+             photo: {
+               type: 'string',
+               format: 'binary',
+               description: '후기 사진 파일 업로드',
+             },
+           },
+           required: ['review', 'photo']
+         }
+       }
+     }
+   }
+
+   #swagger.responses[200] = {
+     description: '후기 수정 성공',
+     content: {
+       'application/json': {
+         schema: {
+           type: 'object',
+           properties: {
+             resultType: { type: 'string', example: 'SUCCESS' },
+             error: { type: 'object', nullable: true, example: null },
+             success: {
+               type: 'object',
+               properties: {
+                 CMId: { type: 'integer', example: 1 },
+                 review: { type: 'string', example: '살려줘' },
+                 photo: { type: 'string', example: 'xxxxx.png' },
+                 updateAt: { type: 'string', format: 'date-time', example: '2024-12-19 05:47:03.000000000' },
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+ */
 }
