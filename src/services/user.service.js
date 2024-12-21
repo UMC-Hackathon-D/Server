@@ -6,11 +6,14 @@ import {
 import {
   findPartyIdByName,
   findPartyById,
+  getPartyCurrentMembers,
 } from "../repositories/party.repository.js";
 import {
   findUserByName,
   createUser,
   getUser,
+  updateUserName,
+  findUserById,
   updateUserCharacterId,
 } from "../repositories/user.repository.js";
 import {
@@ -18,10 +21,14 @@ import {
   DuplicatePartyUserNameError,
   PartyMemberLimitExceededError,
   InvalidPartyPasswordError,
-} from "../party.error.js";
-import { ExsistsPartyToUserError } from "../error.js";
-import { CharacterNotFoundError } from "../character.error.js";
+} from "../errors/party.error.js";
+
+import { CharacterNotFoundError } from "../errors/character.error.js";
 import { findCharacterById } from "../repositories/character.repository.js";
+import {
+  ExsistsPartyToUserError,
+  ExistUserNameError,
+} from "../errors/user.error.js";
 
 // add user to party
 export const createPartyUser = async (userData) => {
@@ -50,10 +57,9 @@ export const createPartyUser = async (userData) => {
     );
   }
 
-  const currentMembers = party.numMember || 0;
-  // const maxMembers = party.numMember;
+  const currentMembers = await getPartyCurrentMembers(partyId);
 
-  if (currentMembers >= 6) {
+  if (currentMembers >= party.numMember) {
     throw new PartyMemberLimitExceededError(
       "Party cannot accept more members",
       { partyId, currentMembers, maxMembers: 6 }
@@ -86,8 +92,8 @@ export const userEnter = async (data) => {
     console.log(`Party not found - Name: ${data.partyName}`);
     throw new PartyNotFoundError("Requested party does not exists", {
       noExists: data.partyName,
-    })
-  };
+    });
+  }
 
   //유저 존재 여부 확인
   const user = await getUser(data.userName, data.partyName);
@@ -98,6 +104,19 @@ export const userEnter = async (data) => {
 
   // console.log(user);
   return responseFromUser(user);
+};
+
+//유저 닉네임 변경하기
+export const userRename = async (data) => {
+  const isUserName = await findUserByName(data.partyId, data.userName);
+
+  if (isUserName) {
+    throw new ExistUserNameError("그룹 내 동일한 닉네임이 있습니다.");
+  }
+
+  const user = await updateUserName(data);
+
+  return user;
 };
 
 // update user character

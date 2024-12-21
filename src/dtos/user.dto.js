@@ -58,9 +58,18 @@ export const responseFromUser = (user) => {
 };
 
 // 그륩 재입장 요청 DTO
-export const bodyToUser = (userName, partyName) => {
+export const bodyToUser = (userName,partyName) =>{
+    return {
+        userName: userName,
+        partyName: partyName,
+    }
+}
+
+//닉네임 재설정 요청 dto
+export const bodyToRenameUser = (userId,partyId,body) =>{
   return {
-    userName: userName,
-    partyName: partyName,
-  };
+    userName: body.name,
+    partyId: parseInt(partyId),
+    userId: parseInt(userId),
+  }
 };

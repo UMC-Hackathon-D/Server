@@ -1,6 +1,6 @@
 import {responseFromPartyCreate} from "../dtos/party.dto.js";
 import {addParty, getParty} from "../repositories/party.repository.js";
-import {ExsistsPartyNameError} from "../error.js";
+import {ExsistsPartyNameError} from "../errors/party.error.js";
 
 // 그룹 생성하기
 export const partyCreate = async (data)=>{
