@@ -1,99 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
 
-// schema.prisma
-
-// 데이터베이스 설정
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-// parties 테이블
 model Party {
-  id         Int       @id @default(autoincrement())
-  numMember  Int?      @map("num_member")
-  password   String?   @db.VarChar(20)
-  createAt   DateTime? @db.DateTime(6) @map("create_at")
-  updateAt   DateTime? @db.DateTime(6) @map("update_at")
-  partyName  String    @unique @db.VarChar(20) @map("party_name")
-
-
-  users      User[]
+  id        Int       @id @default(autoincrement())
+  password  String?   @db.VarChar(20)
+  createAt  DateTime? @map("create_at") @db.DateTime(6)
+  numMember Int?      @map("num_member")
+  partyName String    @unique @map("party_name") @db.VarChar(20)
+  updateAt  DateTime? @map("update_at") @db.DateTime(6)
+  users     User[]
 
   @@map("parties")
 }
 
-// missions 테이블
 model Mission {
-  id            Int       @id @default(autoincrement())
-  missionName   String?   @db.VarChar(20) @map("mission_name")
-  missionContent String?  @db.VarChar(50) @map("mission_content")
-
-  userMissions  UserMission[]
+  id             Int           @id @default(autoincrement())
+  missionContent String?       @map("mission_content") @db.VarChar(50)
+  missionName    String?       @map("mission_name") @db.VarChar(20)
+  userMissions   UserMission[]
 
   @@map("missions")
 }
 
-// characters 테이블
 model Character {
-  id         Int       @id @default(autoincrement())
-  photo      String?   @db.VarChar(255)
-
-  users      User[]
+  id    Int     @id @default(autoincrement())
+  photo String? @db.VarChar(255)
+  users User[]
 
   @@map("characters")
 }
 
-// users 테이블
 model User {
-
-  id          Int         @id @default(autoincrement())
-  partyId     Int?        @map("party_id")
-  name        String?     @db.VarChar(20)
-  createAt    DateTime?   @db.DateTime(6) @map("create_at")
-  updateAt    DateTime?   @db.DateTime(6) @map("update_at")
-  characterId Int?        @map("character_id")
-
-  party       Party?      @relation(fields: [partyId], references: [id])
-  character   Character?  @relation(fields: [characterId], references: [id])
-
+  id               Int           @id @default(autoincrement())
+  name             String?       @db.VarChar(20)
+  characterId      Int?          @map("character_id")
+  createAt         DateTime?     @map("create_at") @db.DateTime(6)
+  partyId          Int?          @map("party_id")
+  updateAt         DateTime?     @map("update_at") @db.DateTime(6)
   givenMissions    UserMission[] @relation("MissionUser")
   receivedMissions UserMission[] @relation("TargetUser")
+  character        Character?    @relation(fields: [characterId], references: [id])
+  party            Party?        @relation(fields: [partyId], references: [id])
 
+  @@index([characterId], map: "users_character_id_fkey")
+  @@index([partyId], map: "users_party_id_fkey")
   @@map("users")
 }
 
-// user_missions 테이블
 model UserMission {
-  id             Int         @id @default(autoincrement())
-  missionId      Int?        @map("mission_id")
-  missionUserId  Int        @map("mission_user_id")
-  targetUserId   Int        @map("target_user_id")
-  status         String?     @db.VarChar(20)
-  createAt       DateTime?   @db.DateTime(6) @map("create_at")
-  updateAt       DateTime?   @db.DateTime(6) @map("update_at")
-
-  mission        Mission?    @relation(fields: [missionId], references: [id])
-  missionUser    User       @relation("MissionUser", fields: [missionUserId], references: [id])
-  targetUser     User       @relation("TargetUser", fields: [targetUserId], references: [id])
+  id               Int               @id @default(autoincrement())
+  status           String?           @db.VarChar(20)
+  createAt         DateTime?         @map("create_at") @db.DateTime(6)
+  missionId        Int?              @map("mission_id")
+  missionUserId    Int               @map("mission_user_id")
+  targetUserId     Int               @map("target_user_id")
+  updateAt         DateTime?         @map("update_at") @db.DateTime(6)
   completeMissions CompleteMission[]
+  mission          Mission?          @relation(fields: [missionId], references: [id])
+  missionUser      User              @relation("MissionUser", fields: [missionUserId], references: [id])
+  targetUser       User              @relation("TargetUser", fields: [targetUserId], references: [id])
 
+  @@index([missionId], map: "user_missions_mission_id_fkey")
+  @@index([missionUserId], map: "user_missions_mission_user_id_fkey")
+  @@index([targetUserId], map: "user_missions_target_user_id_fkey")
   @@map("user_missions")
 }
 
-// complete_missions 테이블
 model CompleteMission {
-  id           Int         @id @default(autoincrement())
-  userMissionId    Int        @map("user_mission_id")
-  photo        String?     @db.VarChar(255)
-  review       String?     @db.Text
-  createAt     DateTime?   @db.DateTime(6) @map("create_at")
-  updateAt     DateTime?   @db.DateTime(6) @map("update_at")
+  id            Int         @id @default(autoincrement())
+  photo         String?     @db.VarChar(255)
+  review        String?     @db.Text
+  createAt      DateTime?   @map("create_at") @db.DateTime(6)
+  updateAt      DateTime?   @map("update_at") @db.DateTime(6)
+  userMissionId Int         @map("user_mission_id")
+  userMission   UserMission @relation(fields: [userMissionId], references: [id])
 
-  userMission  UserMission @relation(fields: [userMissionId], references: [id])
-
+  @@index([userMissionId], map: "complete_missions_user_mission_id_fkey")
   @@map("complete_missions")
 }

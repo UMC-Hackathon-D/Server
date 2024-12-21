@@ -126,3 +126,15 @@ export const findTargetUserById = async (targetUserId) => {
     throw error;
   }
 };
+
+export const updatePartyUserDelete = async (userId) => {
+  const deleteUser = await prisma.user.update({
+    where: { id : parseInt(userId) },
+    data: {
+      partyId: null,
+      updateAt: new Date(),
+    },
+  });
+  
+  return deleteUser;
+}
