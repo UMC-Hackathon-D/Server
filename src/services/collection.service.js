@@ -7,7 +7,7 @@ import {
     getPartyUsers, getUserInfo, getUserMission
 } from "../repositories/collection.repository.js";
 import {getParty} from "../repositories/party.repository.js";
-import {ExsistsCompleteMission} from "../error.js";
+import {ExsistsCompleteMission} from "../errors/collection.error.js";
 
 
 
