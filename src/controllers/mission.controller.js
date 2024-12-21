@@ -471,11 +471,13 @@ export const handleSubmitMissionCompletion = async (req, res, next) => {
   console.log("body: ", req.body);
   console.log("files", req.file);
 
-  // const { partyId, userId, userMissionId } = req.params;
-  // const { photo, review } = req.body;
-
+  const missionData = {
+    ...req.params,
+    photo: req.file?.location, // S3에 업로드된 파일의 URL
+    review: req.body.review,
+  };
   const completedMission = await submitMissionCompletion(
-    missionCompletionRequestToDTO(req.params, req.body)
+    missionCompletionRequestToDTO(req.params, missionData)
   );
 
   res.status(StatusCodes.OK).success(completedMission);
@@ -506,17 +508,18 @@ export const handleSubmitMissionCompletion = async (req, res, next) => {
       type: 'integer'
     }
 
-    #swagger.requestBody = {
+        #swagger.requestBody = {
       required: true,
       content: {
-        "application/json": {
+        "multipart/form-data": {
           schema: {
             type: "object",
-            required: ["photo", "review"],
+            required: ["image", "review"],
             properties: {
-              photo: { 
+              image: {
                 type: "string",
-                description: "미션 완료 인증 사진 URL"
+                format: "binary",
+                description: "미션 완료 인증 사진 파일"
               },
               review: {
                 type: "string",

@@ -29,7 +29,7 @@ import {
   handleSubmitMissionCompletion,
 } from "./controllers/mission.controller.js";
 import { scheduleMissionStatusUpdate } from "./scheduler/mission.scheduler.js";
-import { imageUploader } from "./s3upload.js";
+import { imageUploader } from "./middleware/s3Setting.js";
 
 dotenv.config();
 

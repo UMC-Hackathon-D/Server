@@ -71,7 +71,7 @@ export const missionCompletionRequestToDTO = (params, body) => {
     partyId: parseInt(params.partyId),
     userId: parseInt(params.userId),
     userMissionId: parseInt(params.userMissionId),
-    photo: body.photo,
+    photo: body.photo || null,
     review: body.review,
   };
 };
