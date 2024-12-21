@@ -5,16 +5,8 @@ import {
   getRandomMissions,
   createUserMission,
   getMissionPreview,
+  updateExpiredMissions,
 } from "../services/mission.service.js";
-
-export const handleGetMissionDeadline = async (req, res, next) => {
-  console.log("미션 마감 시간 조회를 요청했습니다!");
-
-  const { partyId, missionId } = req.params;
-  const missionDeadline = await getMissionDeadline(partyId, missionId);
-
-  res.status(StatusCodes.OK).success(missionDeadline);
-};
 
 export const handleGetUserOngoingMission = async (req, res, next) => {
   console.log("유저 진행 중 미션 조회를 요청했습니다!");
@@ -463,6 +455,44 @@ export const handleGetMissionPreview = async (req, res, next) => {
                 }
               },
               success: { type: "null", example: null }
+            }
+          }
+        }
+      }
+    }
+  */
+};
+
+export const handleManualMissionStatusUpdate = async (req, res, next) => {
+  console.log("미션 상태 수정(in progress -> failed) 을 직접 요청했습니다!");
+
+  const result = await updateExpiredMissions();
+  res.status(StatusCodes.OK).success(result);
+
+  /* 
+    #swagger.summary = 'Mission Status Update API'
+    #swagger.tags = ['Mission']
+    #swagger.description = 'Manually triggers the update of in-progress missions to failed status. This endpoint is for testing purposes.'
+    
+    #swagger.responses[200] = {
+      description: "Successfully updated mission statuses",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              resultType: { type: "string", example: "SUCCESS" },
+              error: { type: "null", example: null },
+              success: {
+                type: "object",
+                properties: {
+                  count: { 
+                    type: "integer", 
+                    description: "Number of missions updated",
+                    example: 5 
+                  }
+                }
+              }
             }
           }
         }

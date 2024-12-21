@@ -4,6 +4,7 @@ import {
   findRandomMissions,
   createUserMissionEntry,
   findMissionById,
+  updateExpiredMissionStatus,
 } from "../repositories/mission.repository.js";
 import { findTargetUserById } from "../repositories/user.repository.js";
 import {
@@ -98,4 +99,13 @@ export const getMissionPreview = async ({ missionId, targetUserId }) => {
     missionContent: mission.missionContent,
     targetUserName: targetUser.name,
   });
+};
+
+export const updateExpiredMissions = async () => {
+  const updatedMissions = await updateExpiredMissionStatus();
+
+  console.log(
+    `${updatedMissions.count} expired missions updated to failed status`
+  );
+  return updatedMissions;
 };
