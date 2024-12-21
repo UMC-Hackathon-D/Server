@@ -1,6 +1,6 @@
 import {StatusCodes} from "http-status-codes";
-import {partyCollections, showReview, updateReview} from "../services/collection.service.js";
-import {collectionToParty, reviewToCollection, reviewToUpdate} from "../dtos/collection.dto.js";
+import {deleteReview, partyCollections, showReview, updateReview} from "../services/collection.service.js";
+import {collectionToParty, reviewToCollection, reviewToDelete, reviewToUpdate} from "../dtos/collection.dto.js";
 
 
 //해당 그룹의 낭만모음집 조회
@@ -254,4 +254,37 @@ export const handlerReviewUpdate = async (req, res) => {
      }
    }
  */
+}
+
+export const handlerDeleteCompleteMission = async(req,res,next) => {
+    const review = await deleteReview(reviewToDelete(req.params));
+    res.status(StatusCodes.OK).success(review);
+    /*
+  #swagger.summary = '미션 후기 삭제 API';
+  #swagger.description = 'CMId(CompleteMission의 아이디)를 통해 완료된 미션의 후기를 삭제한다.';
+  #swagger.tags = ['collection']
+
+  #swagger.parameters['CMId'] = {
+    in: 'path',
+    description: '완료된 미션 ID',
+    required: true,
+    type: 'integer',
+  }
+
+  #swagger.responses[200] = {
+    description: '미션 후기 삭제 성공',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            CMId: { type: 'integer', example: 1 },
+            review: { type: 'string', example: '삭제된 리뷰 내용' },
+            photo: { type: 'string', example: 'deleted_photo.png' }
+          }
+        }
+      }
+    }
+  }
+*/
 }

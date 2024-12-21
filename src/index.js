@@ -15,6 +15,7 @@ import {
 } from "./controllers/user.controller.js";
 
 import {
+  handlerDeleteCompleteMission,
   handlerGetCollection,
   handlerGetReview, handlerReviewUpdate,
 } from "./controllers/collection.controller.js";
@@ -129,6 +130,8 @@ app.get(
 //미션 후기 수정
 app.patch("/api/v1/complete_missions/:CMId/review/update", imageUploader("reviews").single('photo'), handlerReviewUpdate);
 
+//미션 후기 삭제
+app.delete("/api/v1/complete_missions/:CMId/review/del", handlerDeleteCompleteMission);
 
 // get character lists
 app.get("/api/v1/characters", handleGetCharacters);
@@ -179,7 +182,7 @@ app.patch("/api/v1/missions/update-status", handleManualMissionStatusUpdate);
 // post user mission verification
 app.post(
   "/api/v1/parties/:partyId/users/:userId/userMissions/:userMissionId/complete",
-  imageUploader.single("image"),
+  imageUploader('reviews').single("image"),
   handleSubmitMissionCompletion
 );
 

@@ -1,5 +1,6 @@
 import {responseFromCollections, responseFromReview, responseFromReviewUpdate} from "../dtos/collection.dto.js";
 import {
+    deleteCompleteMission,
     getCharacter,
     getCollection,
     getCompleteMission, getMission,
@@ -114,6 +115,16 @@ export const updateReview = async(data) =>{
     const context = await updateContext(resolveData.CMId, resolveData.review);
 
     return responseFromReviewUpdate(context);
+}
+
+// 미션 후기 삭제
+export const deleteReview = async (data) =>{
+    const resolveData = await data;
+    const review = await deleteCompleteMission(resolveData.CMId);
+    const s3del = await deleteImage(review.photo);
+    console.log('review',review);
+    console.log('s3del',s3del)
+    return review;
 }
 
 

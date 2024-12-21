@@ -55,3 +55,19 @@ export const responseFromReviewUpdate = async (data)=>{
         updateAt: data.updateAt,
     }
 }
+
+// 미션 후기 삭제 요청 DTO
+export const reviewToDelete = async (params) =>{
+    return{
+        CMId: parseInt(params.CMId)
+    }
+}
+
+//미션 후기 삭제 전송 DTO
+export const responseFromReviewDelete = async (data) =>{
+    return{
+        CMId: parseInt(data.id),
+        review: data.review,
+        photo: data.photo,
+    }
+}
