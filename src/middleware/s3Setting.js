@@ -1,19 +1,19 @@
 import multer from "multer";
 import multerS3 from "multer-s3";
 import path from "path";
-import {S3Client, DeleteObjectCommand} from "@aws-sdk/client-s3";
-import {v4 as uuidv4} from "uuid";
-
+import { S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { v4 as uuidv4 } from "uuid";
+import { WrongFileExtensionError } from "../errors/s3.error.js";
 
 const s3 = new S3Client({
-    region: process.env.AWS_REGION,
-    credentials:{
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    }
-})
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
 
-const allowedExtensions = [".jpg", ".png",".jpeg",".bmp",".gif"];
+const allowedExtensions = [".jpg", ".png", ".jpeg", ".bmp", ".gif"];
 
 // 파일 업로드
 export const imageUploader =(folder = "")=> multer({
@@ -53,23 +53,5 @@ export const deleteImage = async (key)=>{
         throw err;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

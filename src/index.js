@@ -26,9 +26,12 @@ import {
   handleCreateUserMission,
   handleGetMissionPreview,
   handleManualMissionStatusUpdate,
+  handleSubmitMissionCompletion,
 } from "./controllers/mission.controller.js";
 import { scheduleMissionStatusUpdate } from "./scheduler/mission.scheduler.js";
-import {imageUploader} from "./middleware/s3Setting.js";
+
+import { imageUploader } from "./middleware/s3Setting.js";
+
 
 dotenv.config();
 
@@ -94,8 +97,8 @@ app.get("/openapi.json", async (req, res, next) => {
       title: "Nangman Boat",
       description: "UMC 장기 해커톤 개쩌는 D조 낭만보트",
     },
-    // host: `${process.env.SERVER_IP}:3000`,
-    host: `localhost:${3000}`,
+    host: `${process.env.SERVER_IP}:3000`,
+    // host: `localhost:${3000}`,
   };
 
   const result = await swaggerAutogen(options)(outputFile, routes, doc);
@@ -173,6 +176,12 @@ scheduleMissionStatusUpdate();
 app.patch("/api/v1/missions/update-status", handleManualMissionStatusUpdate);
 
 
+// post user mission verification
+app.post(
+  "/api/v1/parties/:partyId/users/:userId/userMissions/:userMissionId/complete",
+  imageUploader.single("image"),
+  handleSubmitMissionCompletion
+);
 
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
