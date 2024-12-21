@@ -6,7 +6,9 @@ import {
   createUserMission,
   getMissionPreview,
   updateExpiredMissions,
+  submitMissionCompletion,
 } from "../services/mission.service.js";
+import { missionCompletionRequestToDTO } from "../dtos/mission.dto.js";
 
 export const handleGetUserOngoingMission = async (req, res, next) => {
   console.log("유저 진행 중 미션 조회를 요청했습니다!");
@@ -450,6 +452,126 @@ export const handleGetMissionPreview = async (req, res, next) => {
                     type: "object",
                     properties: {
                       missionId: { type: "integer", example: 999 }
+                    }
+                  }
+                }
+              },
+              success: { type: "null", example: null }
+            }
+          }
+        }
+      }
+    }
+  */
+};
+
+export const handleSubmitMissionCompletion = async (req, res, next) => {
+  console.log("미션 인증 등록을 요청했습니다!");
+  console.log("params: ", req.params);
+  console.log("body: ", req.body);
+  console.log("files", req.file);
+
+  // const { partyId, userId, userMissionId } = req.params;
+  // const { photo, review } = req.body;
+
+  const completedMission = await submitMissionCompletion(
+    missionCompletionRequestToDTO(req.params, req.body)
+  );
+
+  res.status(StatusCodes.OK).success(completedMission);
+
+  /* 
+    #swagger.summary = '미션 완료 인증 API'
+    #swagger.tags = ['Mission']
+    #swagger.description = '미션 완료를 인증하고 완료 상태로 변경합니다.'
+    
+    #swagger.parameters['partyId'] = {
+      in: 'path',
+      description: '파티 ID',
+      required: true,
+      type: 'integer'
+    }
+    
+    #swagger.parameters['userId'] = {
+      in: 'path',
+      description: '유저 ID',
+      required: true,
+      type: 'integer'
+    }
+
+    #swagger.parameters['userMissionId'] = {
+      in: 'path',
+      description: '유저 미션 ID',
+      required: true,
+      type: 'integer'
+    }
+
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            required: ["photo", "review"],
+            properties: {
+              photo: { 
+                type: "string",
+                description: "미션 완료 인증 사진 URL"
+              },
+              review: {
+                type: "string",
+                description: "미션 완료 후기"
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #swagger.responses[200] = {
+      description: "미션 완료 인증 성공",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              resultType: { type: "string", example: "SUCCESS" },
+              error: { type: "null", example: null },
+              success: {
+                type: "object",
+                properties: {
+                  id: { type: "integer", example: 1 },
+                  userMissionId: { type: "integer", example: 1 },
+                  photo: { type: "string", example: "photo_url.jpg" },
+                  review: { type: "string", example: "미션 후기입니다." },
+                  createdAt: { type: "string", format: "date-time" },
+                  updatedAt: { type: "string", format: "date-time" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #swagger.responses[404] = {
+      description: "미션을 찾을 수 없음",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              resultType: { type: "string", example: "FAIL" },
+              error: {
+                type: "object",
+                properties: {
+                  errorCode: { type: "string", example: "M001" },
+                  reason: { type: "string", example: "Mission not found" },
+                  data: {
+                    type: "object",
+                    properties: {
+                      userId: { type: "integer", example: 1 },
+                      userMissionId: { type: "integer", example: 1 }
                     }
                   }
                 }

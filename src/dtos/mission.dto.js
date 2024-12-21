@@ -65,3 +65,24 @@ export const missionPreviewToResponseDTO = ({
     ],
   };
 };
+
+export const missionCompletionRequestToDTO = (params, body) => {
+  return {
+    partyId: parseInt(params.partyId),
+    userId: parseInt(params.userId),
+    userMissionId: parseInt(params.userMissionId),
+    photo: body.photo,
+    review: body.review,
+  };
+};
+
+export const completeMissionToResponseDTO = (completeMission) => {
+  return {
+    id: completeMission.id,
+    userMissionId: completeMission.userMissionId,
+    photo: completeMission.photo,
+    review: completeMission.review,
+    createdAt: completeMission.createAt,
+    updatedAt: completeMission.updateAt,
+  };
+};

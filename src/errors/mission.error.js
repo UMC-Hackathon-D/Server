@@ -41,3 +41,14 @@ export class UserHasOngoingMissionError extends Error {
     this.statusCode = 400;
   }
 }
+
+export class MissionCompletionError extends Error {
+  errorCode = "M005";
+
+  constructor(reason = "Failed to complete mission", data = {}) {
+    super(reason);
+    this.reason = reason;
+    this.data = data;
+    this.statusCode = 400;
+  }
+}
