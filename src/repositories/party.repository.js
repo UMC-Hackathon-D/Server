@@ -30,6 +30,21 @@ export const findPartyById = async (partyId) => {
   }
 };
 
+export const getPartyCurrentMembers = async (partyId) => {
+  try {
+    const memberCount = await prisma.user.count({
+      where: {
+        partyId: partyId,
+      },
+    });
+
+    return memberCount;
+  } catch (error) {
+    console.error("Error in getPartyCurrentMembers: ", error);
+    throw error;
+  }
+};
+
 //그룹(파티) 생성하기
 export const addParty = async (data) => {
   const party = await prisma.party.findFirst({
@@ -64,17 +79,16 @@ export const addParty = async (data) => {
   return createdParty.id;
 };
 
-
 //파티 아이디로 파티 조회
-export const getParty = async (partyId)=>{
-    const party = await prisma.party.findFirst({where: {id: partyId}});
+export const getParty = async (partyId) => {
+  const party = await prisma.party.findFirst({ where: { id: partyId } });
 
-    if(!party) {
-        return null;
-    }
+  if (!party) {
+    return null;
+  }
 
-    return party;
-}
+  return party;
+};
 
 // // 파티 정보 조회 이름으로 검색
 // export const getCheckParty = async (partyName)=>{
@@ -86,6 +100,7 @@ export const getParty = async (partyId)=>{
 //
 //     return party;
 // }
+
 
 //파티원 조회
 export const getPartyMembers = async (partyId) => {
