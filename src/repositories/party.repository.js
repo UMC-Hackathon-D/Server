@@ -87,3 +87,15 @@ export const getParty = async (partyId)=>{
 //     return party;
 // }
 
+//파티원 조회
+export const getPartyMembers = async (partyId) => {
+  const users = await prisma.user.findMany(
+    {
+      where: {
+        partyId: parseInt(partyId)
+      }
+    }
+  )
+
+  return users;
+}

@@ -19,3 +19,9 @@ export const responseFromPartyCreate = (body)=>{
         password: body.password
     }
 }
+
+export const responseFromPartyMembers = (users) =>{
+    return{
+        data: users
+    }
+};

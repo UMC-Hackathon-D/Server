@@ -6,6 +6,7 @@ import swaggerUiExpress from "swagger-ui-express";
 import {
   handleCreatePartyUser,
   handlerPartyCreate,
+  handlerPartyMember,
 } from "./controllers/party.controller.js";
 import {
   handleRenameUser,
@@ -137,6 +138,10 @@ app.get(
   handleGetUserOngoingMission
 );
 
+
+//그룹 유저 조회
+app.get("/api/v1/parties/:partyId/users",handlerPartyMember);
+
 // get availabe target users
 app.get(
   "/api/v1/parties/:partyId/users/:userId/available-targets",
@@ -154,6 +159,7 @@ app.post(
 
 // get mission preivew
 app.get("/api/v1/missions/preview", handleGetMissionPreview);
+
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {
