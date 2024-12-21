@@ -43,6 +43,9 @@ export const createUser = async (userData) => {
         createAt: new Date(),
         updateAt: new Date(),
       },
+      include: {
+        party: true,
+      },
     });
 
     return newUser;
