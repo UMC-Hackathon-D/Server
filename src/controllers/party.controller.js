@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { createPartyUser } from "../services/user.service.js";
-import { partyCreate } from "../services/party.service.js";
+import { partyCreate, partyMember } from "../services/party.service.js";
 import { userToServiceEntity } from "../dtos/user.dto.js";
 import { createToParty } from "../dtos/party.dto.js";
 
@@ -258,3 +258,49 @@ export const handlerPartyCreate = async (req, res, next) => {
   };
 */
 };
+
+export const handlerPartyMember = async (req, res, next) => {
+  console.log("파티 멤버를 조회를 요청했습니다");
+
+  const userList = await partyMember(req.params.partyId);
+  res.status(StatusCodes.OK).success(userList);
+  /*
+  #swagger.summary = '파티 멤버 조회 API';
+  #swagger.description = '파티내 멤버를 조회하는 API입니다.';
+  #swagger.tags = ['Party']
+
+  #swagger.responses[200] = {
+    description: "그룹 생성 성공 응답",
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            resultType: { type: "string", example: "SUCCESS" },
+            error: { type: "object", nullable: true, example: null },
+            success: {
+              type: "object",
+              properties: {
+                data: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'integer', example: 1 },
+                      partyId: { type: 'integer', example: 1 },
+                      name: { type: 'string', example: '옌찌' },
+                      createAt: { type: 'string', format: 'date-time', example: '2024-12-20T15:28:51.000Z' },
+                      updateAt: { type: 'string', format: 'date-time', example: '2024-12-20T15:28:55.000Z' },
+                      characterId: { type: 'integer', nullable: true, example: null }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+*/
+}

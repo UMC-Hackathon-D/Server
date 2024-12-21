@@ -6,6 +6,7 @@ import swaggerUiExpress from "swagger-ui-express";
 import {
   handleCreatePartyUser,
   handlerPartyCreate,
+  handlerPartyMember,
 } from "./controllers/party.controller.js";
 import { handleRenameUser, handleUserEnter, handleUpdateUserCharacter } from "./controllers/user.controller.js";
 
@@ -128,6 +129,8 @@ app.get(
   handleGetUserOngoingMission
 );
 
+//그룹 유저 조회
+app.get("/api/v1/parties/:partyId/users",handlerPartyMember);
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {

@@ -41,3 +41,14 @@ export class InvalidPartyPasswordError extends Error {
     this.statusCode = 401;
   }
 }
+
+export class IsThereNoMemberInPartyError extends Error {
+  errorCode = "P005";
+
+  constructor(reason = "파티에 사용자가 없습니다.", data = {}) {
+    super(reason);
+    this.reason = reason;
+    this.statusCode = 402;
+    this.data = data;
+  }
+}

@@ -1,6 +1,7 @@
-import {responseFromPartyCreate} from "../dtos/party.dto.js";
-import {addParty, getParty} from "../repositories/party.repository.js";
+import {responseFromPartyCreate, responseFromPartyMembers} from "../dtos/party.dto.js";
+import {addParty, getParty, getPartyMembers} from "../repositories/party.repository.js";
 import {ExsistsPartyNameError} from "../error.js";
+import { IsThereNoMemberInPartyError } from "../party.error.js";
 
 // 그룹 생성하기
 export const partyCreate = async (data)=>{
@@ -13,4 +14,15 @@ export const partyCreate = async (data)=>{
     const party = await getParty(partyId);
     console.log(party)
     return responseFromPartyCreate(party);
+}
+
+//그룹 멤버 조회하기
+export const partyMember = async (partyId) => {
+    const users = await getPartyMembers(partyId);
+
+    if(!users){
+        throw new IsThereNoMemberInPartyError('파티에 사용자가 없습니다.', partyId);
+    }
+
+    return responseFromPartyMembers(users);
 }
