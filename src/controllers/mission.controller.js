@@ -53,47 +53,27 @@ export const handleGetUserOngoingMission = async (req, res, next) => {
               resultType: { type: "string", example: "SUCCESS" },
               error: { type: "null", example: null },
               success: {
-                type: "object",
-                properties: {
-                  userMissionId: { type: "integer", example: 1 },
-                  missionId: { type: "integer", example: 123 },
-                  missionName: { type: "string", example: "Secret Mission" },
-                  missionContent: { type: "string", example: "Complete the task" },
-                  missionUserId: { type: "integer", example: 456 },
-                  targetUserId: { type: "integer", example: 789 },
-                  status: { type: "string", example: "in_progress" },
-                  createdAt: { type: "string", format: "date-time" },
-                  updatedAt: { type: "string", format: "date-time" }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    #swagger.responses[404] = {
-      description: "Mission not found for the user",
-      content: {
-        "application/json": {
-          schema: {
-            type: "object",
-            properties: {
-              resultType: { type: "string", example: "FAIL" },
-              error: {
-                type: "object",
-                properties: {
-                  errorCode: { type: "string", example: "M001" },
-                  reason: { type: "string", example: "No mission found for this user" },
-                  data: {
+                oneOf: [
+                  {
                     type: "object",
                     properties: {
-                      userId: { type: "integer", example: 123 }
+                      userMissionId: { type: "integer", example: 1 },
+                      missionId: { type: "integer", example: 123 },
+                      missionName: { type: "string", example: "비밀 미션" },
+                      missionContent: { type: "string", example: "미션 내용" },
+                      missionUserId: { type: "integer", example: 456 },
+                      targetUserId: { type: "integer", example: 789 },
+                      status: { type: "string", example: "in_progress" },
+                      createdAt: { type: "string", format: "date-time" },
+                      updatedAt: { type: "string", format: "date-time" }
                     }
+                  },
+                  {
+                    type: "null",
+                    description: "No in progress mission yet"
                   }
-                }
-              },
-              success: { type: "null", example: null }
+                ]
+              }
             }
           }
         }
@@ -356,7 +336,7 @@ export const handleCreateUserMission = async (req, res, next) => {
                   missionId: { type: "integer", example: 1 },
                   missionUserId: { type: "integer", example: 2 },
                   targetUserId: { type: "integer", example: 3 },
-                  status: { type: "string", example: "ONGOING" },
+                  status: { type: "string", example: "in_progress" },
                   createdAt: { type: "string", format: "date-time" },
                   updatedAt: { type: "string", format: "date-time" }
                 }
