@@ -5,6 +5,12 @@ import { userToServiceEntity } from "../dtos/user.dto.js";
 import { createToParty } from "../dtos/party.dto.js";
 
 export const handleCreatePartyUser = async (req, res, next) => {
+  console.log("파티 가입을 요청했습니다!");
+  console.log("body: ", req.body);
+
+  const user = await createPartyUser(userToServiceEntity(req.body));
+  res.status(StatusCodes.OK).success(user);
+
   /* #swagger.summary = '그룹에 유저 등록하기 API'
      #swagger.tags = ['Party']
      #swagger.description = 'Creates a new user in an existing party if there is space available'
@@ -175,11 +181,6 @@ export const handleCreatePartyUser = async (req, res, next) => {
         }
      }
   */
-  console.log("파티 가입을 요청했습니다!");
-  console.log("body: ", req.body);
-
-  const user = await createPartyUser(userToServiceEntity(req.body));
-  res.status(StatusCodes.OK).success(user);
 };
 
 //그룹(파티) 생성하기
