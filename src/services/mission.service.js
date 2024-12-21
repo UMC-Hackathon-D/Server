@@ -25,9 +25,7 @@ export const getUserOngoingMission = async (partyId, userId) => {
   const ongoingMission = await findOngoingMissionByUserId(userId);
 
   if (!ongoingMission) {
-    throw new MissionNotFoundError("No mission found for this user", {
-      userId,
-    });
+    return null;
   }
 
   if (ongoingMission.status !== "ONGOING") {
@@ -41,7 +39,7 @@ export const getUserOngoingMission = async (partyId, userId) => {
     );
   }
 
-  return ongoingMission ? ongoingMissionsToResponseDTO(ongoingMission) : null;
+  return ongoingMissionsToResponseDTO(ongoingMission);
 };
 
 export const getAvailableTargetUsers = async (partyId, userId) => {
