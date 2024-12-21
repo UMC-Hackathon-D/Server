@@ -20,11 +20,11 @@ import {
   DuplicatePartyUserNameError,
   PartyMemberLimitExceededError,
   InvalidPartyPasswordError,
-} from "../party.error.js";
+} from "../errors/party.error.js";
 
-import {ExistUserNameError, ExsistsPartyToUserError} from "../error.js";
-import { CharacterNotFoundError } from "../character.error.js";
+import { CharacterNotFoundError } from "../errors/character.error.js";
 import { findCharacterById } from "../repositories/character.repository.js";
+import {ExsistsPartyToUserError,ExistUserNameError} from "../errors/user.error.js";
 
 
 // add user to party

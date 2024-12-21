@@ -8,14 +8,24 @@ import {
   handlerPartyCreate,
   handlerPartyMember,
 } from "./controllers/party.controller.js";
-import { handleRenameUser, handleUserEnter, handleUpdateUserCharacter } from "./controllers/user.controller.js";
+import {
+  handleRenameUser,
+  handleUserEnter,
+  handleUpdateUserCharacter,
+} from "./controllers/user.controller.js";
 
 import {
   handlerGetCollection,
   handlerGetReview,
 } from "./controllers/collection.controller.js";
 import { handleGetCharacters } from "./controllers/character.controller.js";
-import { handleGetUserOngoingMission } from "./controllers/mission.controller.js";
+import {
+  handleGetUserOngoingMission,
+  handleGetAvailableTargetUsers,
+  handleGetRandomMissions,
+  handleCreateUserMission,
+  handleGetMissionPreview,
+} from "./controllers/mission.controller.js";
 
 dotenv.config();
 
@@ -113,9 +123,8 @@ app.get(
 // get character lists
 app.get("/api/v1/characters", handleGetCharacters);
 
-
 // 사용자 닉네임 변경하기
-app.patch("/api/v1/parties/:partyId/users/:userId/rename",handleRenameUser);
+app.patch("/api/v1/parties/:partyId/users/:userId/rename", handleRenameUser);
 
 // patch user character
 app.patch(
@@ -129,8 +138,28 @@ app.get(
   handleGetUserOngoingMission
 );
 
+
 //그룹 유저 조회
 app.get("/api/v1/parties/:partyId/users",handlerPartyMember);
+
+// get availabe target users
+app.get(
+  "/api/v1/parties/:partyId/users/:userId/available-targets",
+  handleGetAvailableTargetUsers
+);
+
+// get mission contents
+app.get("/api/v1/missions/random", handleGetRandomMissions);
+
+// post user mission
+app.post(
+  "/api/v1/parties/:partyId/users/:userId/missions",
+  handleCreateUserMission
+);
+
+// get mission preivew
+app.get("/api/v1/missions/preview", handleGetMissionPreview);
+
 
 /****************전역 오류를 처리하기 위한 미들웨어*******************/
 app.use((err, req, res, next) => {
