@@ -5,6 +5,8 @@ import {
   createUserMissionEntry,
   findMissionById,
   updateExpiredMissionStatus,
+  updateUserMissionStatus,
+  createCompleteMission,
 } from "../repositories/mission.repository.js";
 import { findTargetUserById } from "../repositories/user.repository.js";
 import {
@@ -13,6 +15,7 @@ import {
   createUserMissionDTO,
   userMissionToResponseDTO,
   missionPreviewToResponseDTO,
+  completeMissionToResponseDTO,
 } from "../dtos/mission.dto.js";
 import {
   MissionNotFoundError,
@@ -99,6 +102,44 @@ export const getMissionPreview = async ({ missionId, targetUserId }) => {
     missionContent: mission.missionContent,
     targetUserName: targetUser.name,
   });
+};
+
+export const submitMissionCompletion = async (data) => {
+  const mission = await findOngoingMissionByUserId(data.userId);
+
+  if (!mission) {
+    throw new MissionNotFoundError("Mission not found", {
+      userId: data.userId,
+      userMissionId: data.userMissionId,
+    });
+  }
+
+  if (mission.status !== "in_progress") {
+    throw new MissionNotOngoingError("Mission is not in progress", {
+      userId: data.userId,
+      userMissionId: data.userMissionId,
+      currentStatus: mission.status,
+    });
+  }
+
+  // if (!completedMission) {
+  //   throw new MissionCompletionError("Failed to complete mission", {
+  //     userId: data.userId,
+  //     missionId: ongoingMission.id,
+  //   });
+  // }
+
+  // Update mission status to completed
+  await updateUserMissionStatus(data.userMissionId);
+
+  // Create completion record
+  const completeMission = await createCompleteMission({
+    userMissionId: data.userMissionId,
+    photo: data.photo,
+    review: data.review,
+  });
+
+  return completeMissionToResponseDTO(completeMission);
 };
 
 export const updateExpiredMissions = async () => {

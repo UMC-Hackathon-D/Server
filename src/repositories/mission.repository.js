@@ -136,3 +136,39 @@ export const updateExpiredMissionStatus = async () => {
     throw error;
   }
 };
+
+export const updateUserMissionStatus = async (userMissionId) => {
+  try {
+    const updatedUserMission = await prisma.userMission.update({
+      where: {
+        id: userMissionId,
+      },
+      data: {
+        status: "completed",
+        updateAt: new Date(),
+      },
+    });
+    return updatedUserMission;
+  } catch (error) {
+    console.error("Error in updateUserMissionStatus: ", error);
+    throw error;
+  }
+};
+
+export const createCompleteMission = async (completeMissionData) => {
+  try {
+    const completeMission = await prisma.completeMission.create({
+      data: {
+        userMissionId: completeMissionData.userMissionId,
+        photo: completeMissionData.photo,
+        review: completeMissionData.review,
+        createAt: new Date(),
+        updateAt: new Date(),
+      },
+    });
+    return completeMission;
+  } catch (error) {
+    console.error("Error in createCompleteMission: ", error);
+    throw error;
+  }
+};
