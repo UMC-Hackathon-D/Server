@@ -61,7 +61,7 @@ export const handleGetUserOngoingMission = async (req, res, next) => {
                   missionContent: { type: "string", example: "Complete the task" },
                   missionUserId: { type: "integer", example: 456 },
                   targetUserId: { type: "integer", example: 789 },
-                  status: { type: "string", example: "ONGOING" },
+                  status: { type: "string", example: "in_progress" },
                   createdAt: { type: "string", format: "date-time" },
                   updatedAt: { type: "string", format: "date-time" }
                 }

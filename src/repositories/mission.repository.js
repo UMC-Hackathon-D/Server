@@ -5,7 +5,7 @@ export const findOngoingMissionByUserId = async (userId) => {
     const ongoingMission = await prisma.userMission.findFirst({
       where: {
         missionUserId: parseInt(userId),
-        status: "ONGOING",
+        status: "in_progress",
       },
       include: {
         mission: true,
@@ -48,7 +48,7 @@ export const findAvailableTargetUsers = async (partyId, userId) => {
             NOT: {
               receivedMissions: {
                 some: {
-                  status: "ONGOING",
+                  status: "in_progress",
                 },
               },
             },
